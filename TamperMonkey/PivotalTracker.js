@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.4
+// @version      0.5
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -346,7 +346,7 @@ $.getDiff = function() {
             var found = false;
             var i = 0;
             for (i = 0; i < lastUrls.length; i++) {
-                if (urls[i] === this.toString()) {
+                if (lastUrls[i] === this.toString()) {
                     found = true;
                 }
             }
