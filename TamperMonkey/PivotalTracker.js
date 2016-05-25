@@ -301,7 +301,7 @@ $.getPlanningPoker = function() {
 };
 
 $.getDiff = function() {
-    var tickets = prompt("Please enter your last stories and chores", "");
+    var tickets = prompt("Please enter your last stories and chores from the old sprintPlanning sheet", "");
     var re = /\[[^\]]*\]/g;
 
     if (tickets != null) {
