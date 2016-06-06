@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.7
+// @version      0.8
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -43,6 +43,12 @@ function getChore() {
 
 function getFeature() {
     return $('div[data-type="done"],div[data-type="current"],div[data-type="backlog"],div[data-type="icebox"]').find('.feature').children('.preview').children('.selected').parent();
+}
+
+function getInfoFromUrl(url) {
+    var re = /[0-9]+/g;
+    var id = url.match(re);
+    return $('div[data-id="' + id + '"]')[0];
 }
 
 function update_bug() {
@@ -308,6 +314,8 @@ $.getDiff = function() {
         var lastUrls = tickets.match(re);var sprintSheet = "";
         var urls = [];
         var diffSheet = "";
+        var totalMin = 0;
+        var totalPlus = 0;
 
         var stories = [];
         getFeature().children('.name').each(function(){
@@ -338,7 +346,9 @@ $.getDiff = function() {
                 }
             }
             if (!found) {
-                diffSheet += "* " + this.toString() + "\n";
+                var info = getInfoFromUrl(this.toString());
+                totalMin += parseInt($(info).children().children('.meta').text());
+                diffSheet += "* [" + $(info).children().children().children('.story_name').text() + "](" + this.toString() + ") - " + $(info).children().children('.meta').text() + "pts\n";
             }
         });
         diffSheet += "\n## Scope creep Plus \n";
@@ -354,19 +364,26 @@ $.getDiff = function() {
                 i = 0;
                 for (i = 0; i < stories.length; i++) {
                     if (stories[i].id === this.toString()) {
+                        totalPlus += parseInt(stories[i].usp);
                         diffSheet += "* [" + stories[i].name + "](" + stories[i].id + ") - " + stories[i].usp + "pts\n";
                     }
                 }
                 i = 0;
                 for (i = 0; i < chores.length; i++) {
                     if (chores[i].id === this.toString()) {
+                        totalPlus += parseInt(chores[i].usp);
                         diffSheet += "* [" + chores[i].name + "](" + chores[i].id + ") - " + chores[i].usp + "pts\n";
                     }
                 }
             }
         });
 
+
         console.clear();
+        var diff = totalPlus - totalMin;
+        console.log(diff);
+
+        diffSheet += "\n\n Différence de " + diff + " points de la planification initiale";
         console.log(diffSheet);
     }
 };
