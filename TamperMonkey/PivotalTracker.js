@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.6
+// @version      0.7
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -302,7 +302,7 @@ $.getPlanningPoker = function() {
 
 $.getDiff = function() {
     var tickets = prompt("Please enter your last stories and chores from the old sprintPlanning sheet", "");
-    var re = /\[[^\]]*\]/g;
+    var re = /https[^\]]*/g;
 
     if (tickets != null) {
         var lastUrls = tickets.match(re);var sprintSheet = "";
@@ -312,7 +312,7 @@ $.getDiff = function() {
         var stories = [];
         getFeature().children('.name').each(function(){
             var story = {name:"", id:"", usp:""};
-            story.id = "[https://www.pivotaltracker.com/story/show/" +$(this).parent().parent().attr("data-id") + "]";
+            story.id = "https://www.pivotaltracker.com/story/show/" +$(this).parent().parent().attr("data-id");
             story.name = $(this).children('.story_name').text();
             story.usp = $(this).parent().children('.meta').text();
             stories.push(story);
@@ -322,7 +322,7 @@ $.getDiff = function() {
         var chores = [];
         getChore().children('.name').each(function(){
             var chore = {name:"", id:"", usp:""};
-            chore.id = "[https://www.pivotaltracker.com/story/show/" + $(this).parent().parent().attr("data-id") + "]";
+            chore.id = "https://www.pivotaltracker.com/story/show/" + $(this).parent().parent().attr("data-id");
             chore.name = $(this).children('.story_name').text();
             chore.usp = $(this).parent().children('.meta').text();
             chores.push(chore);
@@ -354,13 +354,13 @@ $.getDiff = function() {
                 i = 0;
                 for (i = 0; i < stories.length; i++) {
                     if (stories[i].id === this.toString()) {
-                        diffSheet += "* " + stories[i].name + " " + stories[i].id + "(" + stories[i].usp + "pts)\n";
+                        diffSheet += "* [" + stories[i].name + "] (" + stories[i].id + ") - " + stories[i].usp + "pts\n";
                     }
                 }
                 i = 0;
                 for (i = 0; i < chores.length; i++) {
                     if (chores[i].id === this.toString()) {
-                        diffSheet += "* " + chores[i].name + " " + chores[i].id + "(" + chores[i].usp + "pts)\n";
+                        diffSheet += "* [" + chores[i].name + "] (" + chores[i].id + ") - " + chores[i].usp + "pts\n";
                     }
                 }
             }
