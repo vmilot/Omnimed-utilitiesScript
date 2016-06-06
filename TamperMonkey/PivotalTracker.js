@@ -139,7 +139,7 @@ $.getReleaseNote = function() {
         var bug = {name:"", id:""};
         bug.id = $(this).parent().parent().attr("data-id");
         bug.name = $(this).children('.story_name').text();
-        $(this).children('.labels').children('a:contains("bugprod")').each(function() {
+        $(this).children('.labels.pre').children('a:contains("bugprod")').each(function() {
             bugs.push(bug);
         });
     });
