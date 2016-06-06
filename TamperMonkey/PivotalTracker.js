@@ -354,13 +354,13 @@ $.getDiff = function() {
                 i = 0;
                 for (i = 0; i < stories.length; i++) {
                     if (stories[i].id === this.toString()) {
-                        diffSheet += "* [" + stories[i].name + "] (" + stories[i].id + ") - " + stories[i].usp + "pts\n";
+                        diffSheet += "* [" + stories[i].name + "](" + stories[i].id + ") - " + stories[i].usp + "pts\n";
                     }
                 }
                 i = 0;
                 for (i = 0; i < chores.length; i++) {
                     if (chores[i].id === this.toString()) {
-                        diffSheet += "* [" + chores[i].name + "] (" + chores[i].id + ") - " + chores[i].usp + "pts\n";
+                        diffSheet += "* [" + chores[i].name + "](" + chores[i].id + ") - " + chores[i].usp + "pts\n";
                     }
                 }
             }
