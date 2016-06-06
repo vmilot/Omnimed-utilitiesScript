@@ -381,8 +381,6 @@ $.getDiff = function() {
 
         console.clear();
         var diff = totalPlus - totalMin;
-        console.log(diff);
-
         diffSheet += "\n\n Différence de " + diff + " points de la planification initiale";
         console.log(diffSheet);
     }
