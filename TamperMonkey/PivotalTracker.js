@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.8
+// @version      0.9
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -182,9 +182,9 @@ $.getSprintSheet = function() {
         var story = {name:"", okr:"", id:""};
         story.id = $(this).parent().parent().attr("data-id");
         story.name = $(this).children('.story_name').text();
-        story.okr = $(this).children('.labels').children('a:contains("okr")').first().text();
+        story.okr = $(this).children('.labels').children('a:contains("ep -")').first().text();
         if (story.okr === "") {
-            story.okr ="okr - autre";
+            story.okr ="ep - autre";
         } else if (story.okr.indexOf(",") > -1) {
             story.okr = story.okr.substring(0,story.okr.indexOf(","));
         }
@@ -197,9 +197,9 @@ $.getSprintSheet = function() {
         var chore = {name:"", okr:"", id:""};
         chore.id = $(this).parent().parent().attr("data-id");
         chore.name = $(this).children('.story_name').text();
-        chore.okr = $(this).children('.labels').children('a:contains("okr")').first().text();
+        chore.okr = $(this).children('.labels').children('a:contains("ep -")').first().text();
         if (chore.okr === "") {
-            chore.okr ="okr - autre";
+            chore.okr ="ep - autre";
         } else if (chore.okr.indexOf(",") > -1) {
             chore.okr = chore.okr.substring(0,chore.okr.indexOf(","));
         }
@@ -215,7 +215,7 @@ $.getSprintSheet = function() {
         bugs.push(bug);
     });
 
-    sprintSheet += "\n== OKR:\n\n";
+    sprintSheet += "\n== Épisodes:\n\n";
     $.each($.unique(okrs.sort()), function() {
         sprintSheet += " * " + this + "\n";
     });
@@ -249,7 +249,7 @@ $.getSprintSheet = function() {
 
     sprintSheet += "\n== Pour Slack ==\n\n";
 
-    sprintSheet += "\n# OKR:\n";
+    sprintSheet += "\n# Épisodes:\n";
     $.each($.unique(okrs.sort()), function() {
         sprintSheet += "* " + this + "\n";
     });
@@ -381,6 +381,8 @@ $.getDiff = function() {
 
         console.clear();
         var diff = totalPlus - totalMin;
+        console.log(diff);
+
         diffSheet += "\n\n Différence de " + diff + " points de la planification initiale";
         console.log(diffSheet);
     }
