@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.5
+// @version      0.6
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
