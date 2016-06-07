@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.9
+// @version      0.10
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -258,7 +258,7 @@ $.getSprintSheet = function() {
 
     sprintSheet += "\n# Corrections de bogues\n";
     $.each(bugs, function() {
-        sprintSheet += " * " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
+        sprintSheet += "* " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
     });
 
     sprintSheet += "\n# Objectifs:\n";
