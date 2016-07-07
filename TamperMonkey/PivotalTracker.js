@@ -51,6 +51,34 @@ function getInfoFromUrl(url) {
     return $('div[data-id="' + id + '"]')[0];
 }
 
+function getEpicInfo(epicLabel) {
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(epicLabel) + "%22", false);
+  xhr.setRequestHeader('X-TrackerToken', '7f0f75cae081938166002d4031622c52');
+  xhr.send();
+
+  var response = JSON.parse(xhr.responseText);
+  return response;
+}
+
+function addReleaseNoteTicketInfo(parameter) {
+    var releaseNote = "";
+    if (parameter.addLabel) {
+      parameter.addLabel = false;
+      var episode = getEpicInfo(parameter.episode.toString());
+      if (episode.length > 0) {
+        releaseNote += "\n== " + episode[0].name + "\n";
+        if (episode[0].description) {
+          releaseNote += episode[0].description + "\n\n";
+        }
+      } else {
+        releaseNote += "\n== " + parameter.episode.toString() + "\n\n";
+      }
+    }
+    releaseNote += " * " + parameter.ticket.name + " [https://www.pivotaltracker.com/story/show/" + parameter.ticket.id + "]\n";
+    return releaseNote;
+}
+
 function update_bug() {
     sumBug = 0;
     countBug = 0;
@@ -177,17 +205,17 @@ $.getReleaseNote = function() {
     $.each($.unique(produits.sort()), function() {
         releaseNote += "\n## " + this + "\n\n";
         var produit = this;
-        var addLabel = true;
           $.each($.unique(eps), function() {
+              var parameter = {
+                addLabel: true,
+                episode: this,
+                ticket: ''};
               var i = 0;
               for (i = 0; i < stories.length; i++) {
                   if (stories[i].prd == produit) {
                       if (stories[i].ep == this) {
-                          if (addLabel) {
-                            addLabel = false;
-                            releaseNote += "\n== " + this + "\n\n";
-                          }
-                          releaseNote += " * " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
+                        parameter.ticket = stories[i];
+                        releaseNote += addReleaseNoteTicketInfo(parameter);
                       }
                   }
               }
@@ -195,11 +223,8 @@ $.getReleaseNote = function() {
               for (i = 0; i < chores.length; i++) {
                   if (chores[i].prd == produit) {
                       if (chores[i].ep == this) {
-                          if (addLabel) {
-                            addLabel = false;
-                            releaseNote += "\n== " + this + "\n\n";
-                          }
-                          releaseNote += " * " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
+                        parameter.ticket = chores[i];
+                        releaseNote += addReleaseNoteTicketInfo(parameter);
                       }
                   }
               }
@@ -263,7 +288,15 @@ $.getSprintSheet = function() {
 
     sprintSheet += "\n== Épisodes:\n\n";
     $.each($.unique(eps.sort()), function() {
-        sprintSheet += "* " + this + "\n";
+        var episode = getEpicInfo(this.toString());
+        if (episode.length > 0) {
+          sprintSheet += "* " + episode[0].name + "\n";
+          if (episode[0].description) {
+            sprintSheet += " * " + episode[0].description + "\n";
+          }
+        } else {
+          sprintSheet += "* " + this + "\n";
+        }
     });
 
     sprintSheet += "\n== SPRINT:\n\n";
@@ -297,7 +330,15 @@ $.getSprintSheet = function() {
 
     sprintSheet += "\n# Épisodes:\n";
     $.each($.unique(eps.sort()), function() {
-        sprintSheet += "* " + this + "\n";
+        var episode = getEpicInfo(this.toString());
+        if (episode.length > 0) {
+          sprintSheet += "* " + episode[0].name + "\n";
+          if (episode[0].description) {
+            sprintSheet += " * " + episode[0].description + "\n";
+          }
+        } else {
+          sprintSheet += "* " + this + "\n";
+        }
     });
 
     sprintSheet += "\n# SPRINT:\n";
