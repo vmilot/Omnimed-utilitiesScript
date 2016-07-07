@@ -128,21 +128,14 @@ function update_output() {
 
 $.getReleaseNote = function() {
     var releaseNote = "Nom de code : \nDate de déploiement visée : \nVersion de chrome supportée : \n\n";
-    var alphaText = '';
     var eps = [];
     var produits = [];
     var stories = [];
     getFeature().children('.name').each(function(){
         var story = {name:"", ep:"", prd:"", id:""};
-        if($(this).children('.labels').children('a:contains("alpha")')) {
-            alphaText = ' - ALPHA';
-        } else {
-            alphaText = '';
-        }
-
         story.id = $(this).parent().parent().attr("data-id");
         story.prd = $(this).children('.labels').children('a:contains("prd")').first().text();
-        story.name = $(this).children('.story_name').text() + alphaText;
+        story.name = $(this).children('.story_name').text();
         if (story.prd === "") {
             story.prd ="prd - autre";
         } else if (story.prd.indexOf(",") > -1) {
