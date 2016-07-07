@@ -53,7 +53,11 @@ function getInfoFromUrl(url) {
 
 function getEpicInfo(epicLabel) {
   var xhr = new XMLHttpRequest();
-  xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(epicLabel) + "%22", false);
+  var label = epicLabel;
+  if (epicLabel.indexOf("ep - ") > -1) {
+    label = epicLabel.substring(5);
+  }
+  xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(label) + "%22&fields=name%2Cdescription%2Ccompleted_at", false);
   xhr.setRequestHeader('X-TrackerToken', '7f0f75cae081938166002d4031622c52');
   xhr.send();
 
@@ -67,7 +71,12 @@ function addReleaseNoteTicketInfo(parameter) {
       parameter.addLabel = false;
       var episode = getEpicInfo(parameter.episode.toString());
       if (episode.length > 0) {
-        releaseNote += "\n== " + episode[0].name + "\n";
+        releaseNote += "\n== " + episode[0].name;
+        if (episode[0].completed_at) {
+          releaseNote += " - Complété\n";
+        } else {
+          releaseNote += "\n";
+        }
         if (episode[0].description) {
           releaseNote += episode[0].description + "\n\n";
         }
