@@ -58,7 +58,6 @@ function getEpicInfo(epicLabel) {
     label = epicLabel.substring(5);
   }
   xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(label) + "%22&fields=name%2Cdescription%2Ccompleted_at", false);
-  xhr.setRequestHeader('X-TrackerToken', '7f0f75cae081938166002d4031622c52');
   xhr.send();
 
   var response = JSON.parse(xhr.responseText);
