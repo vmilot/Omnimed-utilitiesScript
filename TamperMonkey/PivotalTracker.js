@@ -101,10 +101,11 @@ function update_output() {
 $.getReleaseNote = function() {
     var releaseNote = "Nom de code : \nDate de déploiement visée : \nVersion de chrome supportée : \n\n";
     var alphaText = '';
+    var eps = [];
     var produits = [];
     var stories = [];
     getFeature().children('.name').each(function(){
-        var story = {name:"", prd:"", id:""};
+        var story = {name:"", ep:"", prd:"", id:""};
         if($(this).children('.labels').children('a:contains("alpha")')) {
             alphaText = ' - ALPHA';
         } else {
@@ -120,8 +121,15 @@ $.getReleaseNote = function() {
             story.prd = story.prd.substring(0,story.prd.indexOf(","));
         }
         story.prd = capitalizeFirstLetter(story.prd.substring(6));
+        story.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (story.ep === "") {
+            story.ep ="ep - autre";
+        } else if (story.ep.indexOf(",") > -1) {
+            story.ep = story.ep.substring(0,story.ep.indexOf(","));
+        }
         stories.push(story);
         produits.push(story.prd);
+        eps.push(story.ep);
     });
 
     var chores = [];
@@ -136,8 +144,15 @@ $.getReleaseNote = function() {
             chore.prd = chore.prd.substring(0,chore.prd.indexOf(","));
         }
         chore.prd = capitalizeFirstLetter(chore.prd.substring(6));
+        chore.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (chore.ep === "") {
+            chore.ep ="ep - autre";
+        } else if (chore.ep.indexOf(",") > -1) {
+            chore.ep = chore.ep.substring(0,chore.ep.indexOf(","));
+        }
         chores.push(chore);
         produits.push(chore.prd);
+        eps.push(chore.ep);
     });
 
     var bugs = [];
@@ -152,18 +167,34 @@ $.getReleaseNote = function() {
 
     $.each($.unique(produits.sort()), function() {
         releaseNote += "\n## " + this + "\n\n";
-        var i = 0;
-        for (i = 0; i < stories.length; i++) {
-            if (stories[i].prd == this) {
-                releaseNote += " * " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
-            }
-        }
-        i = 0;
-        for (i = 0; i < chores.length; i++) {
-            if (chores[i].prd == this) {
-                releaseNote += " * " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
-            }
-        }
+        var produit = this;
+        var addLabel = true;
+          $.each($.unique(eps), function() {
+              var i = 0;
+              for (i = 0; i < stories.length; i++) {
+                  if (stories[i].prd == produit) {
+                      if (stories[i].ep == this) {
+                          if (addLabel) {
+                            addLabel = false;
+                            releaseNote += "\n== " + this + "\n\n";
+                          }
+                          releaseNote += " * " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
+                      }
+                  }
+              }
+              i = 0;
+              for (i = 0; i < chores.length; i++) {
+                  if (chores[i].prd == produit) {
+                      if (chores[i].ep == this) {
+                          if (addLabel) {
+                            addLabel = false;
+                            releaseNote += "\n== " + this + "\n\n";
+                          }
+                          releaseNote += " * " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
+                      }
+                  }
+              }
+          });
     });
 
     releaseNote += "\n## Corrections de bogues\n\n";
@@ -176,35 +207,35 @@ $.getReleaseNote = function() {
 
 $.getSprintSheet = function() {
     var sprintSheet = "";
-    var okrs = [];
+    var eps = [];
     var stories = [];
     getFeature().children('.name').each(function(){
-        var story = {name:"", okr:"", id:""};
+        var story = {name:"", ep:"", id:""};
         story.id = $(this).parent().parent().attr("data-id");
         story.name = $(this).children('.story_name').text();
-        story.okr = $(this).children('.labels').children('a:contains("ep -")').first().text();
-        if (story.okr === "") {
-            story.okr ="ep - autre";
-        } else if (story.okr.indexOf(",") > -1) {
-            story.okr = story.okr.substring(0,story.okr.indexOf(","));
+        story.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (story.ep === "") {
+            story.ep ="ep - autre";
+        } else if (story.ep.indexOf(",") > -1) {
+            story.ep = story.ep.substring(0,story.ep.indexOf(","));
         }
         stories.push(story);
-        okrs.push(story.okr);
+        eps.push(story.ep);
     });
 
     var chores = [];
     getChore().children('.name').each(function(){
-        var chore = {name:"", okr:"", id:""};
+        var chore = {name:"", ep:"", id:""};
         chore.id = $(this).parent().parent().attr("data-id");
         chore.name = $(this).children('.story_name').text();
-        chore.okr = $(this).children('.labels').children('a:contains("ep -")').first().text();
-        if (chore.okr === "") {
-            chore.okr ="ep - autre";
-        } else if (chore.okr.indexOf(",") > -1) {
-            chore.okr = chore.okr.substring(0,chore.okr.indexOf(","));
+        chore.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (chore.ep === "") {
+            chore.ep ="ep - autre";
+        } else if (chore.ep.indexOf(",") > -1) {
+            chore.ep = chore.ep.substring(0,chore.ep.indexOf(","));
         }
         chores.push(chore);
-        okrs.push(chore.okr);
+        eps.push(chore.ep);
     });
 
     var bugs = [];
@@ -216,31 +247,31 @@ $.getSprintSheet = function() {
     });
 
     sprintSheet += "\n== Épisodes:\n\n";
-    $.each($.unique(okrs.sort()), function() {
-        sprintSheet += " * " + this + "\n";
+    $.each($.unique(eps.sort()), function() {
+        sprintSheet += "* " + this + "\n";
     });
 
     sprintSheet += "\n== SPRINT:\n\n";
 
     sprintSheet += "\n== Corrections de bogues\n\n";
     $.each(bugs, function() {
-        sprintSheet += " * " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
+        sprintSheet += "* " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
     });
 
     sprintSheet += "\n== Objectifs:\n\n";
 
-    $.each($.unique(okrs), function() {
+    $.each($.unique(eps), function() {
         sprintSheet += "\n== " + this + "\n\n";
         var i = 0;
         for (i = 0; i < stories.length; i++) {
-            if (stories[i].okr == this) {
-                sprintSheet += " * " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
+            if (stories[i].ep == this) {
+                sprintSheet += "* " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
             }
         }
         i = 0;
         for (i = 0; i < chores.length; i++) {
-            if (chores[i].okr == this) {
-                sprintSheet += " * " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
+            if (chores[i].ep == this) {
+                sprintSheet += "* " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
             }
         }
     });
@@ -250,7 +281,7 @@ $.getSprintSheet = function() {
     sprintSheet += "\n== Pour Slack ==\n\n";
 
     sprintSheet += "\n# Épisodes:\n";
-    $.each($.unique(okrs.sort()), function() {
+    $.each($.unique(eps.sort()), function() {
         sprintSheet += "* " + this + "\n";
     });
 
@@ -263,17 +294,17 @@ $.getSprintSheet = function() {
 
     sprintSheet += "\n# Objectifs:\n";
 
-    $.each($.unique(okrs), function() {
+    $.each($.unique(eps), function() {
         sprintSheet += "\n## " + this + "\n";
         var i = 0;
         for (i = 0; i < stories.length; i++) {
-            if (stories[i].okr == this) {
+            if (stories[i].ep == this) {
                 sprintSheet += "* " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
             }
         }
         i = 0;
         for (i = 0; i < chores.length; i++) {
-            if (chores[i].okr == this) {
+            if (chores[i].ep == this) {
                 sprintSheet += "* " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
             }
         }
@@ -288,7 +319,7 @@ $.getSprintSheet = function() {
 $.getPlanningPoker = function() {
     var planningPokerList = "";
     getFeature().children('.name').each(function(){
-        var story = {name:"", okr:"", id:""};
+        var story = {name:"", ep:"", id:""};
         story.id = $(this).parent().parent().attr("data-id");
         story.name = $(this).children('.story_name').text();
             planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + story.id + "'>" + story.name + "</a>\n";
@@ -296,7 +327,7 @@ $.getPlanningPoker = function() {
 
     var chores = [];
     getChore().children('.name').each(function(){
-        var chore = {name:"", okr:"", id:""};
+        var chore = {name:"", ep:"", id:""};
         chore.id = $(this).parent().parent().attr("data-id");
         chore.name = $(this).children('.story_name').text();
             planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + chore.id + "'>" + chore.name + "</a>\n";
