@@ -131,6 +131,9 @@ $.getReleaseNote = function() {
         produits.push(story.prd);
         eps.push(story.ep);
     });
+    stories.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
 
     var chores = [];
     getChore().children('.name').each(function(){
@@ -154,6 +157,9 @@ $.getReleaseNote = function() {
         produits.push(chore.prd);
         eps.push(chore.ep);
     });
+    chores.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
 
     var bugs = [];
     getBug().children('.name').each(function(){
@@ -163,6 +169,9 @@ $.getReleaseNote = function() {
         $(this).children('.labels.pre').children('a:contains("bugprod")').each(function() {
             bugs.push(bug);
         });
+    });
+    bugs.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
     });
 
     $.each($.unique(produits.sort()), function() {
@@ -222,6 +231,9 @@ $.getSprintSheet = function() {
         stories.push(story);
         eps.push(story.ep);
     });
+    stories.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
 
     var chores = [];
     getChore().children('.name').each(function(){
@@ -236,6 +248,9 @@ $.getSprintSheet = function() {
         }
         chores.push(chore);
         eps.push(chore.ep);
+    });
+    chores.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
     });
 
     var bugs = [];
