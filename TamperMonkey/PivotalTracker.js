@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal select count
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.11
+// @version      0.12
 // @description  Output the total of point selected
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -70,7 +70,7 @@ function addReleaseNoteTicketInfo(parameter) {
       parameter.addLabel = false;
       var episode = getEpicInfo(parameter.episode.toString());
       if (episode.length > 0) {
-        releaseNote += "\n== " + episode[0].name;
+        releaseNote += "\n### " + episode[0].name;
         if (episode[0].completed_at) {
           releaseNote += " - Complété\n";
         } else {
@@ -80,7 +80,7 @@ function addReleaseNoteTicketInfo(parameter) {
           releaseNote += episode[0].description + "\n\n";
         }
       } else {
-        releaseNote += "\n== " + parameter.episode.toString() + "\n\n";
+        releaseNote += "\n### " + parameter.episode.toString() + "\n\n";
       }
     }
     releaseNote += " * " + parameter.ticket.name + " [https://www.pivotaltracker.com/story/show/" + parameter.ticket.id + "]\n";
