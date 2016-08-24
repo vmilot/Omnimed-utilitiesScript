@@ -44,7 +44,11 @@ function JetBrainsSMListener() {
             lastFailedTestName = stepName;
             var exception = stepResult.getFailureException();
 
-            var stack = exception.stack.toString();
+            var stack = "";
+            if (exception.stack && typeof exception.stack !== 'undefined') {
+                stack = exception.stack.toString();
+            }
+
             stack = stack.replace(/\|/g, "||").replace(/\n/g, "|n").replace(/\r/g, "|r").replace(/'/g, "|'").replace(/\[/g, "|[").replace(/\]/g, "|]");
             message = "##teamcity[testFailed timestamp = '%s' details = '%s' message = '%s' name = 'Step: %s']\n";
             message = message.replace('%s', getCurrentDate());
