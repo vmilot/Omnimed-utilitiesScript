@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Pivotal select count
+// @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.12
-// @description  Output the total of point selected
+// @version      0.13
+// @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
 // @grant        none
