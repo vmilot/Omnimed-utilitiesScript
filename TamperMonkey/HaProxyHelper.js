@@ -10,16 +10,25 @@
 // @require      http://nylen.github.io/shiftcheckbox/jquery.shiftcheckbox.js
 // ==/UserScript==
 
+var DISABLE_REFRESH = true;
+
 $ = jQuery;
 
 $(function() {
+    if (DISABLE_REFRESH && window.location.href.indexOf('norefresh') == -1) {
+        window.location.href = window.location.href + ';norefresh';
+    }
+    
     $(':checkbox').shiftcheckbox();
+    
+    $('th.pxname').each(function() {
+        $(this).prepend('<button style="float:left" onclick="toggleSection(this);return false;">- / +</button>');
+    });
 });
 
-if (window.location.host == "addr.xx.xx.xx:yy") {
-  $('form').each(function(idx, e) {
-      if (idx < 10) {
-          $(e).hide();
-      }
-  });
+window.toggleSection = function(thead) {
+    jQuery(thead).parents('table').next().toggle();
+    
+    return false;
+   
 }
