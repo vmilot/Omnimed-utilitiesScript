@@ -16,7 +16,7 @@ $(function() {
     $(':checkbox').shiftcheckbox();
 });
 
-if (window.location.host == "192.168.251.143:81") {
+if (window.location.host == "addr.xx.xx.xx") {
   $('form').each(function(idx, e) {
       if (idx < 10) {
           $(e).hide();
