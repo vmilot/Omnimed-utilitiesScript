@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Proxy Shift Click
-// @namespace    http://your.homepage/
+// @name         Haproxy Helper
+// @namespace    http://www.omnimed.com/
 // @version      0.1
-// @description  enter something useful
-// @author       You
+// @description  Adds some cool functionality to Haproxy Web Management Interface
+// @author       Omnimed
 // @match        http://*/stats*
 // @grant        none
 // @require      https://code.jquery.com/jquery-2.1.4.min.js
