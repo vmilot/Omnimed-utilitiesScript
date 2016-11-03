@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.13
+// @version      0.14
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -118,6 +118,17 @@ function update_feature() {
         }
         countStory = countStory + 1;
     });
+}
+function executeCopy(text){
+    var copyDiv = document.createElement('div');
+    copyDiv.contentEditable = true;
+    document.body.appendChild(copyDiv);
+    copyDiv.innerText = text;
+    copyDiv.unselectable = "off";
+    copyDiv.focus();
+    document.execCommand('SelectAll');
+    document.execCommand("Copy", false, null);
+    document.body.removeChild(copyDiv);
 }
 
 function update_output() {
@@ -238,6 +249,7 @@ $.getReleaseNote = function() {
     });
     console.clear();
     console.log(releaseNote);
+    executeCopy(releaseNote);
 };
 
 $.getSprintSheet = function() {
@@ -371,6 +383,7 @@ $.getSprintSheet = function() {
 
     console.clear();
     console.log(sprintSheet);
+    executeCopy(sprintSheet);
 };
 
 $.getPlanningPoker = function() {
@@ -392,6 +405,7 @@ $.getPlanningPoker = function() {
 
     console.clear();
     console.log(planningPokerList);
+    executeCopy(planningPokerList);
 };
 
 $.getDiff = function() {
@@ -473,5 +487,6 @@ $.getDiff = function() {
 
         diffSheet += "\n\n Différence de " + diff + " points de la planification initiale";
         console.log(diffSheet);
+        executeCopy(diffSheet);
     }
 };
