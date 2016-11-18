@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.14
+// @version      0.15
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -22,6 +22,12 @@ function capitalizeFirstLetter(string) {
 }
 
 $( document ).bind("ajaxComplete",function() {
+    $('body').find("a[title*='Add Story']").unbind("click");
+    $('body').find("a[title*='Add Story']").bind("click", function(){
+        setTimeout(function() {
+            bindNewTextarea();
+        }, 100);
+    });
     $('.selector').unbind("click");
     $('.selector').bind("click", function(){
         setTimeout(function() {
@@ -32,6 +38,52 @@ $( document ).bind("ajaxComplete",function() {
         }, 100);
     });
 });
+
+function bindNewTextarea() {
+    if ($('.new')) {
+        $('.new').find("div[class='rendered_description tracker_markup']").bind("click", function() {
+            var storyType = $('.new').find("input[name='story[story_type]']")[0].value;
+            if (storyType === "feature") {
+                $('.new').find("textarea[name='story[pending_description]']")[0].value = "En tant que [persona] je veux [action fait par l'utilisateur] afin de [valeur ajoutée ou besoin devant être comblé].\n" +
+                    "\n" +
+                    "ÉTANT DONNÉ que [contexte nécessaire et précondition de l'histoire]\n" +
+                    "QUAND [actions]\n" +
+                    "ALORS [réactions/résultats]\n" +
+                    "\n" +
+                    "**Notes AQ**\n" +
+                    "[Index de fonctionnalité et autres notes nécessaires à la validation de l'histoire]\n" +
+                    "\n" +
+                    "**Notes DEV**\n" +
+                    "[Notes techniques pertinentes pour les développeurs]\n" +
+                    "\n" +
+                    "**Notes Design**\n" +
+                    "[Lien vers les wireframes ou maquettes de l'histoire]\n" +
+                    "\n" +
+                    "**Notes Comms**\n" +
+                    "[Lien vers le Google Docs des textes à vérifier]";
+            } else if (storyType === "chore") {
+                $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Pourquoi c'est nécessaire**\n" +
+                    "\n" +
+                    "**Impact et dépendances**\n" +
+                    "\n" +
+                    "**Références**\n";
+            } else if (storyType === "bug") {
+                $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Comportement actuel**\n" +
+                    "\n" +
+                    "**Comportement désiré**\n" +
+                    "\n" +
+                    "**RECETTE**\n" +
+                    "\n" +
+                    "**Version**\n" +
+                    "* [  ] 41.0.0\n" +
+                    "* [X] 42.0.0 S1\n" +
+                    "\n" +
+                    "**Référence** ";
+            }
+             $('.new').find("div[class='rendered_description tracker_markup']").unbind("click");
+        });
+    }
+}
 
 function getBug() {
     return $('div[data-type="done"],div[data-type="current"],div[data-type="backlog"],div[data-type="icebox"]').find('.bug').children('.preview').children('.selected').parent();
