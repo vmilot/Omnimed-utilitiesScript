@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.15
+// @version      0.16
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -21,9 +21,23 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+$( document ).keypress(function( event ) {
+    if ( event.which == 97 ) {
+        setTimeout(function() {
+            bindNewTextarea();
+        }, 100);
+    }
+});
+
 $( document ).bind("ajaxComplete",function() {
     $('body').find("a[title*='Add Story']").unbind("click");
     $('body').find("a[title*='Add Story']").bind("click", function(){
+        setTimeout(function() {
+            bindNewTextarea();
+        }, 100);
+    });
+    $('body').find("a[class*='button add_story']").unbind("click");
+    $('body').find("a[class*='button add_story']").bind("click", function(){
         setTimeout(function() {
             bindNewTextarea();
         }, 100);
@@ -39,49 +53,53 @@ $( document ).bind("ajaxComplete",function() {
     });
 });
 
+function applyTemplate() {
+    var storyType = $('.new').find("input[name='story[story_type]']")[0].value;
+    if (storyType === "feature") {
+        $('.new').find("textarea[name='story[pending_description]']")[0].value = "En tant que [persona] je veux [action fait par l'utilisateur] afin de [valeur ajoutée ou besoin devant être comblé].\n" +
+            "\n" +
+            "ÉTANT DONNÉ que [contexte nécessaire et précondition de l'histoire]\n" +
+            "QUAND [actions]\n" +
+            "ALORS [réactions/résultats]\n" +
+            "\n" +
+            "**Notes AQ**\n" +
+            "[Index de fonctionnalité et autres notes nécessaires à la validation de l'histoire]\n" +
+            "\n" +
+            "**Notes DEV**\n" +
+            "[Notes techniques pertinentes pour les développeurs]\n" +
+            "\n" +
+            "**Notes Design**\n" +
+            "[Lien vers les wireframes ou maquettes de l'histoire]\n" +
+            "\n" +
+            "**Notes Comms**\n" +
+            "[Lien vers le Google Docs des textes à vérifier]";
+    } else if (storyType === "chore") {
+        $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Pourquoi c'est nécessaire**\n" +
+            "\n" +
+            "**Impact et dépendances**\n" +
+            "\n" +
+            "**Références**\n";
+    } else if (storyType === "bug") {
+        $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Comportement actuel**\n" +
+            "\n" +
+            "**Comportement désiré**\n" +
+            "\n" +
+            "**RECETTE**\n" +
+            "\n" +
+            "**Version**\n" +
+            "* [  ] 41.0.0\n" +
+            "* [X] 42.0.0 S1\n" +
+            "\n" +
+            "**Référence** ";
+    }
+    $('.new').find("div[class='rendered_description tracker_markup']").unbind("click");
+    $('.new').find("div[class='autosaves edit_description GLOBAL__no_save_on_enter']").unbind("click");
+}
+
 function bindNewTextarea() {
     if ($('.new')) {
-        $('.new').find("div[class='rendered_description tracker_markup']").bind("click", function() {
-            var storyType = $('.new').find("input[name='story[story_type]']")[0].value;
-            if (storyType === "feature") {
-                $('.new').find("textarea[name='story[pending_description]']")[0].value = "En tant que [persona] je veux [action fait par l'utilisateur] afin de [valeur ajoutée ou besoin devant être comblé].\n" +
-                    "\n" +
-                    "ÉTANT DONNÉ que [contexte nécessaire et précondition de l'histoire]\n" +
-                    "QUAND [actions]\n" +
-                    "ALORS [réactions/résultats]\n" +
-                    "\n" +
-                    "**Notes AQ**\n" +
-                    "[Index de fonctionnalité et autres notes nécessaires à la validation de l'histoire]\n" +
-                    "\n" +
-                    "**Notes DEV**\n" +
-                    "[Notes techniques pertinentes pour les développeurs]\n" +
-                    "\n" +
-                    "**Notes Design**\n" +
-                    "[Lien vers les wireframes ou maquettes de l'histoire]\n" +
-                    "\n" +
-                    "**Notes Comms**\n" +
-                    "[Lien vers le Google Docs des textes à vérifier]";
-            } else if (storyType === "chore") {
-                $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Pourquoi c'est nécessaire**\n" +
-                    "\n" +
-                    "**Impact et dépendances**\n" +
-                    "\n" +
-                    "**Références**\n";
-            } else if (storyType === "bug") {
-                $('.new').find("textarea[name='story[pending_description]']")[0].value = "**Comportement actuel**\n" +
-                    "\n" +
-                    "**Comportement désiré**\n" +
-                    "\n" +
-                    "**RECETTE**\n" +
-                    "\n" +
-                    "**Version**\n" +
-                    "* [  ] 41.0.0\n" +
-                    "* [X] 42.0.0 S1\n" +
-                    "\n" +
-                    "**Référence** ";
-            }
-             $('.new').find("div[class='rendered_description tracker_markup']").unbind("click");
-        });
+        $('.new').find("div[class='rendered_description tracker_markup']").bind("click", applyTemplate);
+        $('.new').find("div[class='autosaves edit_description GLOBAL__no_save_on_enter']").bind("click", applyTemplate);
     }
 }
 
