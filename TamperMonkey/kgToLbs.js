@@ -36,7 +36,7 @@
                 var inches = (value*39.3700787).toFixed(0);
                 var feet = Math.floor(inches / 12);
                 inches %= 12;
-                $(height).parent().attr('title', feet + ' ft  ' + inches + 'in' );
+                $(height).parent().attr('title', feet + ' ft  ' + inches + ' in' );
             }
 
             getWeightInImperial();
