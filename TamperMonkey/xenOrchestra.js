@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Snapshot Block
 // @namespace    http://192.168.252.94/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       Gabriel Girard
 // @match        http://192.168.252.94/*
