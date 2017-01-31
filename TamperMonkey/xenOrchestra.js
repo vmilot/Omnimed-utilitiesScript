@@ -72,8 +72,8 @@ document.showPopup = function() {
     if (document.getElementsByClassName('header-title')[0] && 
         document.getElementsByClassName('header-title')[0].childNodes[1] && 
         document.getElementsByClassName('header-title')[0].childNodes[1].childNodes[1]&& 
-        document.getElementsByClassName('header-title')[0].childNodes[1].childNodes[1].childNodes[4]) {
-        var url = document.getElementsByClassName('header-title')[0].childNodes[1].childNodes[1].childNodes[4].href;
+        document.getElementsByClassName('header-title')[0].childNodes[1].childNodes[1].childNodes[3]) {
+        var url = document.getElementsByClassName('header-title')[0].childNodes[1].childNodes[1].childNodes[3].href;
         document.getElementById("xo-app").insertAdjacentHTML('afterbegin', ("<div id='popup' style='height: 800px; width: 1840px; position: absolute; background-color: dimgrey; z-index: 3000; top: 70px; left: 50px;'><img src='http://68.media.tumblr.com/3e3dcfd6e8babad3dea12ff168139c7c/tumblr_nc8zo3eYhp1sgl0ajo1_500.gif' style='float: left; position: absolute; width: 360px;height: 279px;'/><div style='font-size: -webkit-xxx-large;font-weight: bolder;float: right;margin-right: 10px;' onclick='document.closePopup()'>X</div><div style=' text-align: center; font-size: -webkit-xxx-large; margin-top: 40px; '>LE HOST A ASSEZ D'ESPACE???? <br><button onclick='document.snapshot()' style='margin-right: 10px;'>OUI</button><button onclick='document.closePopup()'>NON</button></div><iframe src='" + url + "/storage' style=' width: 98%; margin-left: 1%; height: 74%; margin-top: 10px;'></iframe></div>"));
     }
 
