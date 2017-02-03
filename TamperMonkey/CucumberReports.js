@@ -146,7 +146,5 @@ colorCukesMoc('@SQIMDetailNotes');
 colorCukesMoc('@SQIMDetailProblemes');
 colorCukesMoc('@SQIMDetailRefus');
 colorCukesMoc('@SQIMSommaireMedications');
-colorCukesMoc('@PrescripteurVueRenouvelables');
-colorCukesMoc('@PrescripteurVueRenouvelables');
 colorCukesMoc('@DSQAcces');
 
