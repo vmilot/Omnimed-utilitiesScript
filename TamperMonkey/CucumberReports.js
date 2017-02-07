@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
 // @match        https://jenkins.omnimed.com/job/cucumber*/*/cucumber-html-reports/*overview.html
@@ -96,6 +96,13 @@ colorCukesVal('@OCPlancheAnatomique');
 colorCukesVal('@OCReponseLongue');
 colorCukesVal('@OCResultat');
 colorCukesVal('@OCTogglz');
+colorCukesVal('@NCTransmettreNote');
+colorCukesVal('@OCActionLog');
+colorCukesVal('@OCGroupe');
+colorCukesVal('@OCNavigationErratique');
+colorCukesVal('@OCProbleme');
+colorCukesVal('@OCSaisie');
+colorCukesVal('@OCSommaire');
 
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
@@ -105,6 +112,8 @@ colorCukesNic('@CARelation');
 colorCukesNic('@CARendezVous');
 colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
+colorCukesNic('@Aide');
+colorCukesNic('@CA');
 
 colorCukesMoc('@PrescripteurAviseurTherapeutique');
 colorCukesMoc('@PrescripteurCesser');
@@ -125,4 +134,17 @@ colorCukesMoc('@PrescripteurToutSelectionner');
 colorCukesMoc('@PrescripteurVueArchive');
 colorCukesMoc('@PrescripteurVueProfil');
 colorCukesMoc('@PrescripteurVueRenouvelables');
+colorCukesMoc('@SQIIImpression');
+colorCukesMoc('@SQIIListeExamen');
+colorCukesMoc('@SQIITogglz');
+colorCukesMoc('@SQILImpression');
+colorCukesMoc('@SQILListeResultats');
+colorCukesMoc('@SQIMDetailGeneral');
+colorCukesMoc('@SQIMDetailHistorique');
+colorCukesMoc('@SQIMDetailMedications');
+colorCukesMoc('@SQIMDetailNotes');
+colorCukesMoc('@SQIMDetailProblemes');
+colorCukesMoc('@SQIMDetailRefus');
+colorCukesMoc('@SQIMSommaireMedications');
+colorCukesMoc('@DSQAcces');
 
