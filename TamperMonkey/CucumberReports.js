@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
-// @match        https://jenkins.omnimed.com/job/cucumber*/*/cucumber-html-reports/*overview.html
+// @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview.html
 // @grant        none
 // ==/UserScript==
 (function() {
@@ -103,6 +103,7 @@ colorCukesVal('@OCNavigationErratique');
 colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
+colorCukesVal('@OCFichier');
 
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
@@ -147,4 +148,6 @@ colorCukesMoc('@SQIMDetailProblemes');
 colorCukesMoc('@SQIMDetailRefus');
 colorCukesMoc('@SQIMSommaireMedications');
 colorCukesMoc('@DSQAcces');
+colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
+
 
