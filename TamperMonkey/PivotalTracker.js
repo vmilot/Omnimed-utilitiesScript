@@ -57,7 +57,7 @@ $( document ).bind("ajaxComplete",function() {
         }, 100);
     });
     $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#ffcffb');
+    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#7cb8ea');
 });
 
 function applyTemplate() {
