@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.16
+// @version      0.17
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -29,6 +29,11 @@ $( document ).keypress(function( event ) {
     }
 });
 
+$( document ).ready(function() {
+    $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://www.innosportlabsportenbeweeg.nl/maintemplates/internet/images/search.png) !important;} </style>").appendTo("head");
+});
+
+
 $( document ).bind("ajaxComplete",function() {
     $('body').find("a[title*='Add Story']").unbind("click");
     $('body').find("a[title*='Add Story']").bind("click", function(){
@@ -51,6 +56,8 @@ $( document ).bind("ajaxComplete",function() {
             update_output();
         }, 100);
     });
+    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
+    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#ffcffb');
 });
 
 function applyTemplate() {
