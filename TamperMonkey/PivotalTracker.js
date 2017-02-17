@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.18
+// @version      0.19
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -31,7 +31,16 @@ $( document ).keypress(function( event ) {
 
 $( document ).ready(function() {
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
+    updateAnalyse();
 });
+
+function updateAnalyse() {
+    setTimeout(function() {
+        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
+        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#7cb8ea');
+        updateAnalyse();
+    }, 5000);
+}
 
 
 $( document ).bind("ajaxComplete",function() {
@@ -56,8 +65,6 @@ $( document ).bind("ajaxComplete",function() {
             update_output();
         }, 100);
     });
-    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#7cb8ea');
 });
 
 function applyTemplate() {
