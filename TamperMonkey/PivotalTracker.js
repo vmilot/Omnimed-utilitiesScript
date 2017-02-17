@@ -37,7 +37,6 @@ $( document ).ready(function() {
 function updateAnalyse() {
     setTimeout(function() {
         $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().css('background-color','#7cb8ea');
         updateAnalyse();
     }, 5000);
 }
