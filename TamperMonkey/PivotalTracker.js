@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.20
+// @version      0.21
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -37,7 +37,7 @@ $( document ).ready(function() {
 
 function updateAnalyse() {
     setTimeout(function() {
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('heartIcon');
+        $('.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('heartIcon');
         $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
         updateAnalyse();
     }, 5000);
