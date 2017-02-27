@@ -38,7 +38,7 @@ $( document ).ready(function() {
 function updateAnalyse() {
     setTimeout(function() {
         $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('analyseIcon');
+        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('heartIcon');
         updateAnalyse();
     }, 5000);
 }
