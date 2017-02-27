@@ -30,7 +30,7 @@ $( document ).keypress(function( event ) {
 });
 
 $( document ).ready(function() {
-    $("<style type='text/css'> .heartIcon:before{ background-image:url(http://icons.iconarchive.com/icons/aha-soft/dating/256/flying-heart-icon.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .heartIcon:before{ background-image:url(http://www.rw-designer.com/icon-image/7503-256x256x32.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
     updateAnalyse();
 });
