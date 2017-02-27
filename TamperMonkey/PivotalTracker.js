@@ -30,15 +30,15 @@ $( document ).keypress(function( event ) {
 });
 
 $( document ).ready(function() {
-    $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .heartIcon:before{ background-image:url(http://downloadicons.net/sites/default/files/heart-icon-62329.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
     updateAnalyse();
 });
 
 function updateAnalyse() {
     setTimeout(function() {
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
         $('.bug,.chore,.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('heartIcon');
+        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
         updateAnalyse();
     }, 5000);
 }
