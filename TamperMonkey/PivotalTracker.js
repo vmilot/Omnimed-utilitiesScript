@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.22
+// @version      0.23
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -30,14 +30,14 @@ $( document ).keypress(function( event ) {
 });
 
 $( document ).ready(function() {
-    $("<style type='text/css'> .heartIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/coeur.jpg) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .infraIcon:before{ background-image:url(http://www.govindindustries.com/images/infra.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
     updateAnalyse();
 });
 
 function updateAnalyse() {
     setTimeout(function() {
-        $('.feature').find('.labels.post').find("a:contains('coeur')").parent().parent().parent().children('.meta').addClass('heartIcon');
+        $('.feature').find('.labels.post').find("a:contains('prd - infrastructure')").parent().parent().parent().children('.meta').addClass('infraIcon');
         $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
         updateAnalyse();
     }, 5000);
