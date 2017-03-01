@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.24
+// @version      0.25
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -34,42 +34,66 @@ $( document ).ready(function() {
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/analyse.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .shadowIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/shadow.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .onAirIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/onair.png) !important;} </style>").appendTo("head");
-    updateIcons();
 });
 
 function updateIcons() {
-    setTimeout(function() {
-        $('.feature').find('.labels.post').find("a:contains('onair')").parent().parent().parent().children('.meta').addClass('onAirIcon');
-        $('.feature').find('.labels.post').find("a:contains('devops')").parent().parent().parent().children('.meta').addClass('devopsIcon');
-        $('.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('shadow')").parent().parent().parent().children('.meta').addClass('shadowIcon');
-        updateIcons();
-    }, 5000);
+    $('.feature').find('.labels.post').find("a:contains('onair')").parent().parent().parent().children('.meta').addClass('onAirIcon');
+    $('.feature').find('.labels.post').find("a:contains('devops')").parent().parent().parent().children('.meta').addClass('devopsIcon');
+    $('.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
+    $('.bug,.chore,.feature').find('.labels.post').find("a:contains('shadow')").parent().parent().parent().children('.meta').addClass('shadowIcon');
+}
+
+function updateFlyoverIcons() {
+    $('.flyover.visible').find("a:contains('onair')").parent().parent().children('.meta').addClass( "onAirIcon" );
+    $('.flyover.visible').find("a:contains('devops')").parent().parent().children('.meta').addClass( "devopsIcon" );
+    $('.flyover.visible').find("a:contains('analyse')").parent().parent().children('.meta').addClass( "analyseIcon" );
+    $('.flyover.visible').find("a:contains('shadow')").parent().parent().children('.meta').addClass( "shadowIcon" );
 }
 
 
-$( document ).bind("ajaxComplete",function() {
-    $('body').find("a[title*='Add Story']").unbind("click");
-    $('body').find("a[title*='Add Story']").bind("click", function(){
-        setTimeout(function() {
-            bindNewTextarea();
-        }, 100);
-    });
-    $('body').find("a[class*='button add_story']").unbind("click");
-    $('body').find("a[class*='button add_story']").bind("click", function(){
-        setTimeout(function() {
-            bindNewTextarea();
-        }, 100);
-    });
-    $('.selector').unbind("click");
-    $('.selector').bind("click", function(){
-        setTimeout(function() {
-            update_bug();
-            update_chore();
-            update_feature();
-            update_output();
-        }, 100);
-    });
+$( document ).bind("ajaxSuccess",function(event, xhr, settings) {
+    if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
+        $('body').find("a[title*='Add Story']").unbind("click");
+        $('body').find("a[title*='Add Story']").bind("click", function(){
+            setTimeout(function() {
+                bindNewTextarea();
+            }, 100);
+        });
+        $('body').find("a[class*='button add_story']").unbind("click");
+        $('body').find("a[class*='button add_story']").bind("click", function(){
+            setTimeout(function() {
+                bindNewTextarea();
+            }, 100);
+        });
+        $('.selector').unbind("click");
+        $('.selector').bind("click", function(){
+            setTimeout(function() {
+                update_bug();
+                update_chore();
+                update_feature();
+                update_output();
+            }, 100);
+        });
+        $('.expander.undraggable').unbind("click");
+        $('.expander.undraggable').bind("click", function(){
+            setTimeout(function() {
+                $('.autosaves.collapser').unbind("click");
+                $('.autosaves.collapser').bind("click", function(){
+                    setTimeout(function() {
+                        updateIcons();
+                        $('.autosaves.collapser').unbind("click");
+                    }, 100);
+                });
+            }, 100);
+        });
+        $('.bug,.chore,.feature').unbind("mouseenter");
+        $('.bug,.chore,.feature').bind("mouseenter", function(){
+            setTimeout(function() {
+                updateFlyoverIcons();
+            }, 1100);
+        });
+        updateIcons();
+    }
 });
 
 function applyTemplate() {
