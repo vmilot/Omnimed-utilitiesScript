@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.25
+// @version      0.26
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -73,7 +73,9 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
                 update_feature();
                 update_output();
             }, 100);
-        });
+        });setTimeout(function() {
+                updateFlyoverIcons();
+            }, 1100);
         $('.expander.undraggable').unbind("click");
         $('.expander.undraggable').bind("click", function(){
             setTimeout(function() {
@@ -90,6 +92,9 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
         $('.bug,.chore,.feature').bind("mouseenter", function(){
             setTimeout(function() {
                 updateFlyoverIcons();
+                setTimeout(function() {
+                    updateFlyoverIcons();
+                }, 500);
             }, 1100);
         });
         updateIcons();
