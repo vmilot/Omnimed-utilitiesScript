@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.23
+// @version      0.24
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -30,16 +30,20 @@ $( document ).keypress(function( event ) {
 });
 
 $( document ).ready(function() {
-    $("<style type='text/css'> .infraIcon:before{ background-image:url(http://www.govindindustries.com/images/infra.png) !important;} </style>").appendTo("head");
-    $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://cdn2.iconfinder.com/data/icons/pixel-perfect-at-24px-volume-7/24/2190-128.png) !important;} </style>").appendTo("head");
-    updateAnalyse();
+    $("<style type='text/css'> .devopsIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/devops.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/analyse.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .shadowIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/shadow.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .onAirIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/onair.png) !important;} </style>").appendTo("head");
+    updateIcons();
 });
 
-function updateAnalyse() {
+function updateIcons() {
     setTimeout(function() {
-        $('.feature').find('.labels.post').find("a:contains('prd - infrastructure')").parent().parent().parent().children('.meta').addClass('infraIcon');
-        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
-        updateAnalyse();
+        $('.feature').find('.labels.post').find("a:contains('onair')").parent().parent().parent().children('.meta').addClass('onAirIcon');
+        $('.feature').find('.labels.post').find("a:contains('devops')").parent().parent().parent().children('.meta').addClass('devopsIcon');
+        $('.feature').find('.labels.post').find("a:contains('analyse')").parent().parent().parent().children('.meta').addClass('analyseIcon');
+        $('.bug,.chore,.feature').find('.labels.post').find("a:contains('shadow')").parent().parent().parent().children('.meta').addClass('shadowIcon');
+        updateIcons();
     }, 5000);
 }
 
