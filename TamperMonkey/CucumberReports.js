@@ -106,7 +106,6 @@ colorCukesVal('@OCNavigationErratique');
 colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
-colorCukesVal('@OCFichier');
 
 colorCukesNic('@Aide');
 colorCukesNic('@CA');
