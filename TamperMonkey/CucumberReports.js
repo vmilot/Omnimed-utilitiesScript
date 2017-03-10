@@ -90,21 +90,25 @@ function colorCukesNic(word) {
         p.replaceChild(frag, textNode);
     }
 }
-
+colorCukesVal('@NCFichier');
+colorCukesVal('@NCTransmettreNote');
+colorCukesVal('@OCAllergie'); 
+colorCukesVal('@OCAntecedentFamilial');
 colorCukesVal('@OCAntecedent');
+colorCukesVal('@OCImmunisation');
 colorCukesVal('@OCPlancheAnatomique');
 colorCukesVal('@OCReponseLongue');
 colorCukesVal('@OCResultat');
 colorCukesVal('@OCTogglz');
-colorCukesVal('@NCTransmettreNote');
 colorCukesVal('@OCActionLog');
 colorCukesVal('@OCGroupe');
 colorCukesVal('@OCNavigationErratique');
 colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
-colorCukesVal('@OCFichier');
 
+colorCukesNic('@Aide');
+colorCukesNic('@CA');
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
 colorCukesNic('@CAInterfaceExterne');
@@ -113,15 +117,16 @@ colorCukesNic('@CARelation');
 colorCukesNic('@CARendezVous');
 colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
-colorCukesNic('@Aide');
-colorCukesNic('@CA');
 
+colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
+colorCukesMoc('@PrescripteurArchiverRestaurer');
 colorCukesMoc('@PrescripteurAviseurTherapeutique');
 colorCukesMoc('@PrescripteurCesser');
 colorCukesMoc('@PrescripteurFavoris');
 colorCukesMoc('@PrescripteurGabaritDePrescription');
 colorCukesMoc('@PrescripteurImportationDSQ');
 colorCukesMoc('@PrescripteurInscrireMedication');
+colorCukesMoc('@PrescripteurMiseAuSommaire');
 colorCukesMoc('@PrescripteurMonographie');
 colorCukesMoc('@PrescripteurNarcotique');
 colorCukesMoc('@PrescripteurPosologieTexte');
