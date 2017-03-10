@@ -90,7 +90,7 @@ function colorCukesNic(word) {
         p.replaceChild(frag, textNode);
     }
 }
-
+colorCukesVal('@OCAntecedentFamilial');
 colorCukesVal('@OCAntecedent');
 colorCukesVal('@OCPlancheAnatomique');
 colorCukesVal('@OCReponseLongue');
@@ -104,6 +104,8 @@ colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
 colorCukesVal('@OCFichier');
+colorCukesVal('@NCFichier');
+
 
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
@@ -116,12 +118,15 @@ colorCukesNic('@CATogglz');
 colorCukesNic('@Aide');
 colorCukesNic('@CA');
 
+colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
+colorCukesMoc('@PrescripteurArchiverRestaurer');
 colorCukesMoc('@PrescripteurAviseurTherapeutique');
 colorCukesMoc('@PrescripteurCesser');
 colorCukesMoc('@PrescripteurFavoris');
 colorCukesMoc('@PrescripteurGabaritDePrescription');
 colorCukesMoc('@PrescripteurImportationDSQ');
 colorCukesMoc('@PrescripteurInscrireMedication');
+colorCukesMoc('@PrescripteurMiseAuSommaire');
 colorCukesMoc('@PrescripteurMonographie');
 colorCukesMoc('@PrescripteurNarcotique');
 colorCukesMoc('@PrescripteurPosologieTexte');
