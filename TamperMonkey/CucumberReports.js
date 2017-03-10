@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
 // @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview.html
