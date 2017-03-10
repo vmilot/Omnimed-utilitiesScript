@@ -90,13 +90,16 @@ function colorCukesNic(word) {
         p.replaceChild(frag, textNode);
     }
 }
+colorCukesVal('@NCFichier');
+colorCukesVal('@NCTransmettreNote');
+colorCukesVal('@OCAllergie'); 
 colorCukesVal('@OCAntecedentFamilial');
 colorCukesVal('@OCAntecedent');
+colorCukesVal('@OCImmunisation');
 colorCukesVal('@OCPlancheAnatomique');
 colorCukesVal('@OCReponseLongue');
 colorCukesVal('@OCResultat');
 colorCukesVal('@OCTogglz');
-colorCukesVal('@NCTransmettreNote');
 colorCukesVal('@OCActionLog');
 colorCukesVal('@OCGroupe');
 colorCukesVal('@OCNavigationErratique');
@@ -104,9 +107,9 @@ colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
 colorCukesVal('@OCFichier');
-colorCukesVal('@NCFichier');
 
-
+colorCukesNic('@Aide');
+colorCukesNic('@CA');
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
 colorCukesNic('@CAInterfaceExterne');
@@ -115,8 +118,6 @@ colorCukesNic('@CARelation');
 colorCukesNic('@CARendezVous');
 colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
-colorCukesNic('@Aide');
-colorCukesNic('@CA');
 
 colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
 colorCukesMoc('@PrescripteurArchiverRestaurer');
