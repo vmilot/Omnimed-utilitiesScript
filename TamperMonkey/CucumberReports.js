@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.5
+// @version      0.6
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
 // @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview.html
@@ -95,7 +95,8 @@ colorCukesVal('@NCTransmettreNote');
 colorCukesVal('@OCAllergie'); 
 colorCukesVal('@OCAntecedentFamilial');
 colorCukesVal('@OCAntecedent');
-colorCukesVal('@OCImmunisation');
+colorCukesVal('@OCFichier');
+colorCukesVal('@OCImmunisationEtVaccins');
 colorCukesVal('@OCPlancheAnatomique');
 colorCukesVal('@OCReponseLongue');
 colorCukesVal('@OCResultat');
@@ -107,8 +108,8 @@ colorCukesVal('@OCProbleme');
 colorCukesVal('@OCSaisie');
 colorCukesVal('@OCSommaire');
 
+
 colorCukesNic('@Aide');
-colorCukesNic('@CA');
 colorCukesNic('@CACoordonnees');
 colorCukesNic('@CAInfoAdministratives');
 colorCukesNic('@CAInterfaceExterne');
@@ -117,6 +118,7 @@ colorCukesNic('@CARelation');
 colorCukesNic('@CARendezVous');
 colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
+colorCukesNic('@CA');
 
 colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
 colorCukesMoc('@PrescripteurArchiverRestaurer');
