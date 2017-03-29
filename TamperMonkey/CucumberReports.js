@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.6
+// @version      0.8
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
-// @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview.html
+// @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview-tags.html
 // @grant        none
 // ==/UserScript==
 (function() {
@@ -27,7 +27,7 @@ function colorCukesVal(word) {
                 node = document.createElement('span');
                 node.style.backgroundColor = 'Blue';
                 node.style.color = 'White';
-                node.appendChild(document.createTextNode(word + " ---> (vmilot)"));
+                node.appendChild(document.createTextNode(word));
                 frag.appendChild(node);
             }
             if (text.length) {
@@ -53,7 +53,7 @@ function colorCukesMoc(word) {
                 node = document.createElement('span');
                 node.style.backgroundColor = 'Black';
                 node.style.color = 'White';
-                node.appendChild(document.createTextNode(word  + " ---> (mcormier)"));
+                node.appendChild(document.createTextNode(word));
                 frag.appendChild(node);
             }
             if (text.length) {
@@ -79,7 +79,7 @@ function colorCukesNic(word) {
                 node = document.createElement('span');
                 node.style.backgroundColor = 'Red';
                 node.style.color = 'White';
-                node.appendChild(document.createTextNode(word + " ---> (nguillette)"));
+                node.appendChild(document.createTextNode(word));
                 frag.appendChild(node);
             }
             if (text.length) {
@@ -90,11 +90,13 @@ function colorCukesNic(word) {
         p.replaceChild(frag, textNode);
     }
 }
+colorCukesVal('@NCConsentement');
 colorCukesVal('@NCFichier');
 colorCukesVal('@NCTransmettreNote');
 colorCukesVal('@OCAllergie'); 
 colorCukesVal('@OCAntecedentFamilial');
 colorCukesVal('@OCAntecedent');
+colorCukesVal('@OCCalcul');
 colorCukesVal('@OCFichier');
 colorCukesVal('@OCImmunisationEtVaccins');
 colorCukesVal('@OCPlancheAnatomique');
@@ -120,6 +122,13 @@ colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
 colorCukesNic('@CA');
 
+colorCukesMoc('@PrescripteurActionLogAjout');
+colorCukesMoc('@PrescripteurActionLogAnnuler');
+colorCukesMoc('@PrescripteurActionLogArchiver');
+colorCukesMoc('@PrescripteurActionLogMettreFin');
+colorCukesMoc('@PrescripteurActionLogModifier');
+colorCukesMoc('@PrescripteurActionLogRenouveler');
+colorCukesMoc('@PrescripteurActionLogSupprimer');
 colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
 colorCukesMoc('@PrescripteurArchiverRestaurer');
 colorCukesMoc('@PrescripteurAviseurTherapeutique');
@@ -134,7 +143,6 @@ colorCukesMoc('@PrescripteurNarcotique');
 colorCukesMoc('@PrescripteurPosologieTexte');
 colorCukesMoc('@PrescripteurPreference');
 colorCukesMoc('@PrescripteurPrescriptionTexte');
-colorCukesMoc('@PrescripteurPrescrireMedication');
 colorCukesMoc('@PrescripteurRechercherMedication');
 colorCukesMoc('@PrescripteurRenouveler');
 colorCukesMoc('@PrescripteurTogglz');
@@ -156,5 +164,8 @@ colorCukesMoc('@SQIMDetailRefus');
 colorCukesMoc('@SQIMSommaireMedications');
 colorCukesMoc('@DSQAcces');
 colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
+colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
+colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
+colorCukesMoc('@PrescripteurPrescrireMedication');
 
 
