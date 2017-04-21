@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.27
+// @version      0.28
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -12,6 +12,7 @@ var $ = jQuery;
 var countStory = 0;
 var countChore = 0;
 var countBug = 0;
+var releaseName = 'vieux boucau';
 var sumStory = 0;
 var sumChore = 0;
 var sumBug = 0;
@@ -34,6 +35,7 @@ $( document ).ready(function() {
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/analyse.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .shadowIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/shadow.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .onAirIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/onair.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .invalidStory .preview { background-color: #B8860B !important;} </style>").appendTo("head");
 });
 
 function updateIcons() {
@@ -50,6 +52,10 @@ function updateFlyoverIcons() {
     $('.flyover.visible').find("a:contains('shadow')").parent().parent().children('.meta').addClass( "shadowIcon" );
 }
 
+function validateStories() {
+    /* Validate that all stories have a release tag */
+	$('.story.delivered, .story.finished, .story.started').not(':has(a:contains("' + releaseName + '")), :has(a:contains("patch"))').addClass('invalidStory');
+}
 
 $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
     if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
@@ -92,12 +98,15 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
         $('.bug,.chore,.feature').bind("mouseenter", function(){
             setTimeout(function() {
                 updateFlyoverIcons();
+                validateStories();
                 setTimeout(function() {
                     updateFlyoverIcons();
+                    validateStories();
                 }, 500);
             }, 1100);
         });
         updateIcons();
+        validateStories();
     }
 });
 
