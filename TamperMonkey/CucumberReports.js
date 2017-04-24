@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      0.8
+// @version      0.9
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier
 // @match        https://jenkins.omnimed.com/job/cucumber*/cucumber-html-reports/*overview-tags.html
@@ -90,29 +90,12 @@ function colorCukesNic(word) {
         p.replaceChild(frag, textNode);
     }
 }
-colorCukesVal('@NCConsentement');
-colorCukesVal('@NCFichier');
-colorCukesVal('@NCTransmettreNote');
-colorCukesVal('@OCAllergie'); 
-colorCukesVal('@OCAntecedentFamilial');
-colorCukesVal('@OCAntecedent');
-colorCukesVal('@OCCalcul');
-colorCukesVal('@OCFichier');
-colorCukesVal('@OCImmunisationEtVaccins');
-colorCukesVal('@OCPlancheAnatomique');
-colorCukesVal('@OCReponseLongue');
-colorCukesVal('@OCResultat');
-colorCukesVal('@OCTogglz');
-colorCukesVal('@OCActionLog');
-colorCukesVal('@OCGroupe');
-colorCukesVal('@OCNavigationErratique');
-colorCukesVal('@OCProbleme');
-colorCukesVal('@OCSaisie');
-colorCukesVal('@OCSommaire');
-
-
+colorCukesNic('@NCConsentement');
+colorCukesNic('@NCFichier');
+colorCukesNic('@NCTransmettreNote');
 colorCukesNic('@Aide');
 colorCukesNic('@CACoordonnees');
+colorCukesNic('@CAFusion');
 colorCukesNic('@CAInfoAdministratives');
 colorCukesNic('@CAInterfaceExterne');
 colorCukesNic('@CAMedecinDeFamille');
@@ -121,6 +104,26 @@ colorCukesNic('@CARendezVous');
 colorCukesNic('@CARenseignementsPersonnels');
 colorCukesNic('@CATogglz');
 colorCukesNic('@CA');
+colorCukesNic('@OCAllergie'); 
+colorCukesNic('@OCAntecedentFamilial');
+colorCukesNic('@OCAntecedent');
+colorCukesNic('@OCCalcul');
+colorCukesNic('@OCChoixMultiples');
+colorCukesNic('@OCCreation');
+colorCukesNic('@OCElementsGeneraux');
+colorCukesNic('@OCFichier');
+colorCukesNic('@OCImmunisationEtVaccins');
+colorCukesNic('@OCPlancheAnatomique');
+colorCukesNic('@OCReponseLongue');
+colorCukesNic('@OCResultat');
+colorCukesNic('@OCTogglz');
+colorCukesNic('@OCActionLog');
+colorCukesNic('@OCGroupe');
+colorCukesNic('@OCNavigationErratique');
+colorCukesNic('@OCProbleme');
+colorCukesNic('@OCSaisie');
+colorCukesNic('@OCSommaire');
+
 
 colorCukesMoc('@PrescripteurActionLogAjout');
 colorCukesMoc('@PrescripteurActionLogAnnuler');
@@ -140,6 +143,7 @@ colorCukesMoc('@PrescripteurInscrireMedication');
 colorCukesMoc('@PrescripteurMiseAuSommaire');
 colorCukesMoc('@PrescripteurMonographie');
 colorCukesMoc('@PrescripteurNarcotique');
+colorCukesMoc('@PrescripteurOrdonnanceEnCours');
 colorCukesMoc('@PrescripteurPosologieTexte');
 colorCukesMoc('@PrescripteurPreference');
 colorCukesMoc('@PrescripteurPrescriptionTexte');
@@ -163,9 +167,8 @@ colorCukesMoc('@SQIMDetailProblemes');
 colorCukesMoc('@SQIMDetailRefus');
 colorCukesMoc('@SQIMSommaireMedications');
 colorCukesMoc('@DSQAcces');
+colorCukesMoc('@DSQ');
 colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
 colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
 colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
 colorCukesMoc('@PrescripteurPrescrireMedication');
-
-
