@@ -12,7 +12,7 @@ var $ = jQuery;
 var countStory = 0;
 var countChore = 0;
 var countBug = 0;
-var releaseName = 'vieux boucau';
+var releaseName;
 var sumStory = 0;
 var sumChore = 0;
 var sumBug = 0;
@@ -54,8 +54,9 @@ function updateFlyoverIcons() {
 
 function validateStories() {
     /* Validate that all stories have a release tag */
-	$('.story.delivered, .story.finished, .story.started').not(':has(a:contains("' + releaseName + '")), :has(a:contains("patch"))').addClass('invalidStory');
+	$('.story.delivered, .story.finished, .story.started').not(':has(a:contains("' + getReleaseName() + '")), :has(a:contains("patch"))').addClass('invalidStory');
 }
+
 
 $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
     if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
@@ -192,6 +193,25 @@ function getEpicInfo(epicLabel) {
   var response = JSON.parse(xhr.responseText);
   return response;
 }
+
+function getReleaseName() {
+    if (!releaseName) {
+        var releaseLongName;
+        var response;
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=unstarted", false);
+        xhr.send();
+
+        response = JSON.parse(xhr.responseText);
+        releaseLongName = response[0].name;
+
+        releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
+    }
+    
+    return releaseName;
+}
+
 
 function addReleaseNoteTicketInfo(parameter) {
     var releaseNote = "";
