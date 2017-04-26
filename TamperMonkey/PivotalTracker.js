@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.27
+// @version      0.28
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -12,6 +12,7 @@ var $ = jQuery;
 var countStory = 0;
 var countChore = 0;
 var countBug = 0;
+var releaseName;
 var sumStory = 0;
 var sumChore = 0;
 var sumBug = 0;
@@ -34,6 +35,7 @@ $( document ).ready(function() {
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/analyse.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .shadowIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/shadow.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .onAirIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/onair.png) !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .invalidStory .preview { background-color: #B8860B !important;} </style>").appendTo("head");
 });
 
 function updateIcons() {
@@ -48,6 +50,11 @@ function updateFlyoverIcons() {
     $('.flyover.visible').find("a:contains('devops')").parent().parent().children('.meta').addClass( "devopsIcon" );
     $('.flyover.visible').find("a:contains('analyse')").parent().parent().children('.meta').addClass( "analyseIcon" );
     $('.flyover.visible').find("a:contains('shadow')").parent().parent().children('.meta').addClass( "shadowIcon" );
+}
+
+function validateStories() {
+    /* Validate that all stories have a release tag */
+	$('.story.delivered, .story.finished, .story.started').not(':has(a:contains("' + getReleaseName() + '")), :has(a:contains("patch"))').addClass('invalidStory');
 }
 
 
@@ -92,12 +99,15 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
         $('.bug,.chore,.feature').bind("mouseenter", function(){
             setTimeout(function() {
                 updateFlyoverIcons();
+                validateStories();
                 setTimeout(function() {
                     updateFlyoverIcons();
+                    validateStories();
                 }, 500);
             }, 1100);
         });
         updateIcons();
+        validateStories();
     }
 });
 
@@ -183,6 +193,25 @@ function getEpicInfo(epicLabel) {
   var response = JSON.parse(xhr.responseText);
   return response;
 }
+
+function getReleaseName() {
+    if (!releaseName) {
+        var releaseLongName;
+        var response;
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=unstarted", false);
+        xhr.send();
+
+        response = JSON.parse(xhr.responseText);
+        releaseLongName = response[0].name;
+
+        releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
+    }
+    
+    return releaseName;
+}
+
 
 function addReleaseNoteTicketInfo(parameter) {
     var releaseNote = "";
