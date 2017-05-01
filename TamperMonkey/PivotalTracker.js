@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.28
+// @version      0.29
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Gabriel Girard
 // @match        https://www.pivotaltracker.com/*
@@ -200,7 +200,7 @@ function getReleaseName() {
         var response;
         var xhr = new XMLHttpRequest();
 
-        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=unstarted", false);
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=planned", false);
         xhr.send();
 
         response = JSON.parse(xhr.responseText);
@@ -209,7 +209,7 @@ function getReleaseName() {
         releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
         
         if (!releaseName){
-            xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=planned", false);
+            xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=unstarted", false);
             xhr.send();
 
             response = JSON.parse(xhr.responseText);
