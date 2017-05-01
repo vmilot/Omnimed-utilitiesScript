@@ -207,6 +207,16 @@ function getReleaseName() {
         releaseLongName = response[0].name;
 
         releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
+        
+        if (!releaseName){
+            xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=planned", false);
+            xhr.send();
+
+            response = JSON.parse(xhr.responseText);
+            releaseLongName = response[0].name;
+
+            releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
+        }
     }
     
     return releaseName;
