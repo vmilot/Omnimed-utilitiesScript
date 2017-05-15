@@ -1,14 +1,15 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.30
+// @version      0.31
 // @description  Pivotal Tracker enhanced for Omnimed
-// @author       Gabriel Girard
+// @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
 // @grant        none
 // ==/UserScript==
 
 var $ = jQuery;
+var bugTemplate;
 var countStory = 0;
 var countChore = 0;
 var countBug = 0;
@@ -147,17 +148,7 @@ function applyTemplate() {
                 "\n" +
                 "**Références**\n";
         } else if (storyType === "bug") {
-            $('.new').find(".AutosizeTextarea__textarea___1LL2IPEy")[0].value = "**Comportement actuel**\n" +
-                "\n" +
-                "**Comportement désiré**\n" +
-                "\n" +
-                "**RECETTE**\n" +
-                "\n" +
-                "**Version**\n" +
-                "* [  ] 41.0.0\n" +
-                "* [X] 42.0.0 S1\n" +
-                "\n" +
-                "**Référence** ";
+            $('.new').find(".AutosizeTextarea__textarea___1LL2IPEy")[0].value = getBugTemplate();
         }
     }, 100);
     $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup']").unbind("click");
@@ -173,6 +164,22 @@ function bindNewTextarea() {
 
 function getBug() {
     return $('div[data-type="done"],div[data-type="current"],div[data-type="backlog"],div[data-type="icebox"]').find('.bug').children('.preview').children('.selected').parent();
+}
+
+function getBugTemplate() {
+	if(!bugTemplate) {
+		var response;
+		var xhr = new XMLHttpRequest();
+
+		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388833", false);
+		xhr.send();
+
+		response = JSON.parse(xhr.responseText);
+
+		bugTemplate = response.description;
+	}
+
+	return bugTemplate;
 }
 
 function getChore() {
