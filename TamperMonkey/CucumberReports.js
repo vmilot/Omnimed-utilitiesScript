@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  Pimp cucumber reports
-// @author       mquiron, mcormier
+// @author       mquiron, mcormier, nguillet 
 // @match        https://jenkins.omnimed.com/job/*/cucumber-html-reports/*overview-tags.html
 // @grant        none
 // ==/UserScript==
@@ -216,6 +216,7 @@ colorCukesMoc('@PrescripteurAviseurTherapeutique');
 colorCukesMoc('@PrescripteurCesser');
 colorCukesMoc('@PrescripteurFavoris');
 colorCukesMoc('@PrescripteurGabaritDePrescription');
+colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
 colorCukesMoc('@PrescripteurImportationDSQ');
 colorCukesMoc('@PrescripteurInscrireMedication');
 colorCukesMoc('@PrescripteurMiseAuSommaire');
@@ -225,6 +226,11 @@ colorCukesMoc('@PrescripteurOrdonnanceEnCours');
 colorCukesMoc('@PrescripteurPosologieTexte');
 colorCukesMoc('@PrescripteurPreference');
 colorCukesMoc('@PrescripteurPrescriptionTexte');
+colorCukesMoc('@PrescripteurPrescrireMedication');
+colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
+colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
+colorCukesMoc('@PrescripteurPrescrireMedicationInstruction');
+colorCukesMoc('@PrescripteurPrescrireMedicationNPS');
 colorCukesMoc('@PrescripteurRechercherMedication');
 colorCukesMoc('@PrescripteurRenouveler');
 colorCukesMoc('@PrescripteurTogglz');
@@ -247,14 +253,7 @@ colorCukesMoc('@SQIMDetailRefus');
 colorCukesMoc('@SQIMSommaireMedications');
 colorCukesMoc('@DSQAcces');
 colorCukesMoc('@DSQ');
-colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
-colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
-colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
-colorCukesMoc('@PrescripteurPrescrireMedication');
 colorCukesMoc('@SVActionLog');
 colorCukesMoc('@SVGrille');
 colorCukesMoc('@SVUniteMesure');
 colorCukesMoc('@SignesVitaux');
-
-
-
