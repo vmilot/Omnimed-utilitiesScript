@@ -9,7 +9,7 @@
 // ==/UserScript==
 $( document ).ready(function() {
 	$("<style type='text/css'> .cukeMoc { background-color: black !important; color: white !important; } </style>").appendTo("head");
-	$("<style type='text/css'> .cukeNic { background-color: red !important; color: white !important; font-size: xx-small; } </style>").appendTo("head");
+	$("<style type='text/css'> .cukeNic { background-color: red !important; color: white !important; } </style>").appendTo("head");
 	$("<style type='text/css'> .cukeVal { background-color: blue !important; color: white !important; } </style>").appendTo("head");
 });
 
@@ -22,8 +22,8 @@ function colorCucumberTagForQA(tag, qa) {
 			console.warn('Cucumber tag ' + tag + ' does not exists');
 		}
 	} else {
-		if ($('.tagname > a:contains(' + tag + ')').length !== 0) {
-			$('.tagname > a:contains(' + tag + ')').addClass('cuke' + qa);
+		if ($('.tagname > a:contains(@' + tag + ')').length !== 0) {
+			$('.tagname > a:contains(@' + tag + ')').addClass('cuke' + qa);
 		} else {
 			console.warn('Cucumber tag ' + tag + ' does not exists');
 		}
@@ -44,7 +44,7 @@ function colorCucumberTags() {
 	colorCucumberTagForQA('CentreAdmin', 'Nic');
 	colorCucumberTagForQA('ChampConfidentiel', 'Nic');
 	colorCucumberTagForQA('Compte', 'Nic');
-	
+
 	colorCucumberTagForQA('Dictionnaire', 'Moc');
 	colorCucumberTagForQA('Droits', 'Nic');
 	colorCucumberTagForQA('DSQ', 'Moc');
