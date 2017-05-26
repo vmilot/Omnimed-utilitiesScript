@@ -1,262 +1,98 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      1.3
+// @version      1.4
 // @description  Pimp cucumber reports
-// @author       mquiron, mcormier, nguillet 
+// @author       mquiron, mcormier, nguillet shenault
 // @match        https://jenkins.omnimed.com/job/*/cucumber-html-reports/*overview-tags.html
 // @grant        none
 // ==/UserScript==
-(function() {
-    'use strict';
-    jQuery('table.table-bordered thead tr').append('<th>Percent</th>');
-    jQuery('table.table-bordered tbody tr.info').append('<td>'+ parseFloat(parseFloat(jQuery('td[data-column=2]').text() / jQuery('td[data-column=1]').text())*100).toFixed(2) +'%</td>');
-})();
+$( document ).ready(function() {
+	$("<style type='text/css'> .cukeMoc { background-color: black !important; color: white !important; } </style>").appendTo("head");
+	$("<style type='text/css'> .cukeNic { background-color: red !important; color: white !important; font-size: xx-small; } </style>").appendTo("head");
+	$("<style type='text/css'> .cukeVal { background-color: blue !important; color: white !important; } </style>").appendTo("head");
+});
 
-function colorCukesVal(word) {
-    var xpath = "//text()[contains(., '" + word + "')]";
-    var texts = document.evaluate(xpath, document.body, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (n = 0; n < texts.snapshotLength; n++) {
-        var textNode = texts.snapshotItem(n);
-        var p = textNode.parentNode;
-        var a = [];
-        var frag = document.createDocumentFragment();
-        textNode.nodeValue.split(word).forEach(function(text, i) {
-            var node;
-            if (i) {
-                node = document.createElement('span');
-                node.style.backgroundColor = 'Blue';
-                node.style.color = 'White';
-                node.appendChild(document.createTextNode(word));
-                frag.appendChild(node);
-            }
-            if (text.length) {
-                frag.appendChild(document.createTextNode(text));
-            }
-            return a;
-        });
-        p.replaceChild(frag, textNode);
-    }
+function colorCucumberTagForQA(tag, qa) {
+	if (tag === 'CA') {
+		/* Special case: name conflits between CAS and CA. */
+		if ($('.tagname > a:contains(@CA):not(:contains(@CAS))').length !== 0) {
+			$('.tagname > a:contains(@CA):not(:contains(@CAS))').addClass('cuke' + qa);
+		} else {
+			console.warn('Cucumber tag ' + tag + ' does not exists');
+		}
+	} else {
+		if ($('.tagname > a:contains(' + tag + ')').length !== 0) {
+			$('.tagname > a:contains(' + tag + ')').addClass('cuke' + qa);
+		} else {
+			console.warn('Cucumber tag ' + tag + ' does not exists');
+		}
+	}
 }
 
-function colorCukesMoc(word) {
-    var xpath = "//text()[contains(., '" + word + "')]";
-    var texts = document.evaluate(xpath, document.body, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (n = 0; n < texts.snapshotLength; n++) {
-        var textNode = texts.snapshotItem(n);
-        var p = textNode.parentNode;
-        var a = [];
-        var frag = document.createDocumentFragment();
-        textNode.nodeValue.split(word).forEach(function(text, i) {
-            var node;
-            if (i) {
-                node = document.createElement('span');
-                node.style.backgroundColor = 'Black';
-                node.style.color = 'White';
-                node.appendChild(document.createTextNode(word));
-                frag.appendChild(node);
-            }
-            if (text.length) {
-                frag.appendChild(document.createTextNode(text));
-            }
-            return a;
-        });
-        p.replaceChild(frag, textNode);
-    }
+function colorCucumberTags() {
+	colorCucumberTagForQA('Aide', 'Nic');
+	colorCucumberTagForQA('AjoutResultat', 'Val');
+	colorCucumberTagForQA('Allergie', 'Val');
+	colorCucumberTagForQA('Antecedents', 'Val');
+	colorCucumberTagForQA('Aviseur', 'Moc');
+
+	colorCucumberTagForQA('Beta', 'Moc');
+
+	colorCucumberTagForQA('CA', 'Nic');
+	colorCucumberTagForQA('CAS', 'Nic');
+	colorCucumberTagForQA('CentreAdmin', 'Nic');
+	colorCucumberTagForQA('ChampConfidentiel', 'Nic');
+	colorCucumberTagForQA('Compte', 'Nic');
+	
+	colorCucumberTagForQA('Dictionnaire', 'Moc');
+	colorCucumberTagForQA('Droits', 'Nic');
+	colorCucumberTagForQA('DSQ', 'Moc');
+
+	colorCucumberTagForQA('Etiquette', 'Nic');
+
+	colorCucumberTagForQA('GuideUtilisateur', 'Val');
+
+	colorCucumberTagForQA('HabitudesDeVie', 'Nic');
+
+	colorCucumberTagForQA('Immunisation', 'Val');
+
+	colorCucumberTagForQA('ListeResultat', 'Val');
+	colorCucumberTagForQA('ListeTaches', 'Val');
+
+	colorCucumberTagForQA('MaladieChronique', 'Nic');
+
+	colorCucumberTagForQA('NC', 'Nic');
+	colorCucumberTagForQA('Note', 'Nic');
+	colorCucumberTagForQA('Notification', 'Moc');
+	colorCucumberTagForQA('Nouvelles', 'Moc');
+
+	colorCucumberTagForQA('OC', 'Nic');
+
+	colorCucumberTagForQA('Patient', 'Nic');
+	colorCucumberTagForQA('Prescripteur', 'Moc');
+	colorCucumberTagForQA('Problemes', 'Val');
+	colorCucumberTagForQA('Profil', 'Nic');
+	colorCucumberTagForQA('Programmes', 'Nic');
+
+	colorCucumberTagForQA('RendezVous', 'Nic');
+	colorCucumberTagForQA('Resultat', 'Val');
+	colorCucumberTagForQA('RevisionNotes', 'Nic');
+	colorCucumberTagForQA('RevisionResultats', 'Val');
+	colorCucumberTagForQA('RevisionTaches', 'Nic');
+
+	colorCucumberTagForQA('SalleDAttente', 'Nic');
+	colorCucumberTagForQA('SmokedTest', 'Nic');
+	colorCucumberTagForQA('SQII', 'Moc');
+	colorCucumberTagForQA('SQIL', 'Moc');
+	colorCucumberTagForQA('SQIM', 'Moc');
+	colorCucumberTagForQA('SignesVitaux', 'Moc');
+	colorCucumberTagForQA('SuppressionResultat', 'Val');
+	colorCucumberTagForQA('SV', 'Moc');
+
+	colorCucumberTagForQA('Taches', 'Nic');
+
+	colorCucumberTagForQA('UMF', 'Nic');
 }
 
-function colorCukesNic(word) {
-    var xpath = "//text()[contains(., '" + word + "')]";
-    var texts = document.evaluate(xpath, document.body, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-    for (n = 0; n < texts.snapshotLength; n++) {
-        var textNode = texts.snapshotItem(n);
-        var p = textNode.parentNode;
-        var a = [];
-        var frag = document.createDocumentFragment();
-        textNode.nodeValue.split(word).forEach(function(text, i) {
-            var node;
-            if (i) {
-                node = document.createElement('span');
-                node.style.backgroundColor = 'Red';
-                node.style.color = 'White';
-                node.appendChild(document.createTextNode(word));
-                frag.appendChild(node);
-            }
-            if (text.length) {
-                frag.appendChild(document.createTextNode(text));
-            }
-            return a;
-        });
-        p.replaceChild(frag, textNode);
-    }
-}
-
-
-colorCukesVal('@AjoutResultat');
-colorCukesVal('@Allergie');
-colorCukesVal('@AntecedentsFamiliaux');
-colorCukesVal('@Antecedents');
-colorCukesVal('@GuideUtilisateur');
-colorCukesVal('@ImmunisationEtVaccinsActionLog');
-colorCukesVal('@ImmunisationEtVaccinsAjout');
-colorCukesVal('@ImmunisationEtVaccins');
-colorCukesVal('@ListeResultatDate');
-colorCukesVal('@ListeResultatDescription');
-colorCukesVal('@ListeResultatTerme');
-colorCukesVal('@ListeResultatTri');
-colorCukesVal('@ListeResultat');
-colorCukesVal('@ListeTachesSurResultats');
-colorCukesVal('@ListeTaches');
-colorCukesVal('@Problemes');
-colorCukesVal('@ResultatActionLog');
-colorCukesVal('@RevisionResultatsActions');
-colorCukesVal('@RevisionResultatsCommentaires');
-colorCukesVal('@RevisionResultatsFiltre');
-colorCukesVal('@RevisionResultatsNoteClinique');
-colorCukesVal('@RevisionResultatsTri');
-colorCukesVal('@RevisionResultats');
-colorCukesVal('@SuppressionResultat');
-
-colorCukesNic('@NCConsentement');
-colorCukesNic('@NCFichier');
-colorCukesNic('@NCTransmettreNote');
-colorCukesNic('@Aide');
-colorCukesNic('@CACoordonnees');
-colorCukesNic('@CAFusion');
-colorCukesNic('@CAInfoAdministratives');
-colorCukesNic('@CAInterfaceExterne');
-colorCukesNic('@CAMedecinDeFamille');
-colorCukesNic('@RecherchePatient');
-colorCukesNic('@CARecherchePatient');
-colorCukesNic('@CARelation');
-colorCukesNic('@CARendezVous');
-colorCukesNic('@CARenseignementsPersonnels');
-colorCukesNic('@CATogglz');
-colorCukesNic('@CAS');
-colorCukesNic('@CA');
-colorCukesNic('@CentreAdmin');
-colorCukesNic('@ChampConfidentiel');
-colorCukesNic('@Compte');
-colorCukesNic('@Droits');
-colorCukesNic('@Etiquette');
-colorCukesNic('@HabitudesDeVieAjoutModif');
-colorCukesNic('@HabitudesDeVieActionLog');
-colorCukesNic('@HabitudesDeVie');
-colorCukesNic('@MaladieChronique');
-colorCukesNic('@NCEnteteDossierPatient');
-colorCukesNic('@NoteCliniqueAutre');
-colorCukesNic('@NoteCliniqueConsultation');
-colorCukesNic('@NoteCliniqueDroits');
-colorCukesNic('@NoteCliniqueImpression');
-colorCukesNic('@NoteCliniqueListe');
-colorCukesNic('@NoteCliniqueOrdreActionLogMaladieChronique');
-colorCukesNic('@NoteCliniqueOrdreActionLog');
-colorCukesNic('@NoteEnCours');
-colorCukesNic('@OCAllergie'); 
-colorCukesNic('@OCAntecedentFamilial');
-colorCukesNic('@OCAntecedent');
-colorCukesNic('@OCCalcul');
-colorCukesNic('@OCChoixMultiples');
-colorCukesNic('@OCCreation');
-colorCukesNic('@OCElementsGeneraux');
-colorCukesNic('@OCFichier');
-colorCukesNic('@OCImmunisationEtVaccins');
-colorCukesNic('@OCPlancheAnatomique');
-colorCukesNic('@OCReponseLongue');
-colorCukesNic('@OCResultat');
-colorCukesNic('@OCTogglz');
-colorCukesNic('@OCActionLog');
-colorCukesNic('@OCGroupe');
-colorCukesNic('@OCNavigationErratique');
-colorCukesNic('@OCProbleme');
-colorCukesNic('@OCSaisie');
-colorCukesNic('@OCSommaire');
-colorCukesNic('@Patient');
-colorCukesNic('@ProfilUtilisateur');
-colorCukesNic('@ProgrammesActionLog');
-colorCukesNic('@Programmes');
-colorCukesNic('@RendezVousAReassigner');
-colorCukesNic('@RendezVousAgenda');
-colorCukesNic('@RendezVousDeplacer');
-colorCukesNic('@RendezVousDisponibilite');
-colorCukesNic('@RendezVousGeneral');
-colorCukesNic('@RendezVousInteraction');
-colorCukesNic('@RendezVousPlageHoraireAjout');
-colorCukesNic('@RendezVousPlageHoraireAnnulation');
-colorCukesNic('@RendezVousPlageHoraireModificationRecurrenceException');
-colorCukesNic('@RendezVousPlageHoraireModificationRecurrence');
-colorCukesNic('@RendezVousPlageHoraireModification');
-colorCukesNic('@RendezVousPlageHoraireVisualisation');
-colorCukesNic('@RevisionNotes');
-colorCukesNic('@RevisionTachesDroits');
-colorCukesNic('@RevisionTachesNoteClinique');
-colorCukesNic('@RevisionTaches');
-colorCukesNic('@SalleDAttente');
-colorCukesNic('@TachesAutre');
-colorCukesNic('@UMFNoteClinique');
-colorCukesNic('@UMFRevisionTache');
-colorCukesNic('@UMF');
-
-
-colorCukesMoc('@Aviseur');
-colorCukesMoc('@Beta');
-colorCukesMoc('@Dictionnaire');
-colorCukesMoc('@Notification');
-colorCukesMoc('@Nouvelles');
-colorCukesMoc('@PrescripteurActionLogAjout');
-colorCukesMoc('@PrescripteurActionLogAnnuler');
-colorCukesMoc('@PrescripteurActionLogArchiver');
-colorCukesMoc('@PrescripteurActionLogMettreFin');
-colorCukesMoc('@PrescripteurActionLogModifier');
-colorCukesMoc('@PrescripteurActionLogRenouveler');
-colorCukesMoc('@PrescripteurActionLogSupprimer');
-colorCukesMoc('@PrescripteurAnnulerSupprimerMettreFin');
-colorCukesMoc('@PrescripteurArchiverRestaurer');
-colorCukesMoc('@PrescripteurAviseurTherapeutique');
-colorCukesMoc('@PrescripteurCesser');
-colorCukesMoc('@PrescripteurFavoris');
-colorCukesMoc('@PrescripteurGabaritDePrescription');
-colorCukesMoc('@PrescripteurHistoriqueLigneDuTemps');
-colorCukesMoc('@PrescripteurImportationDSQ');
-colorCukesMoc('@PrescripteurInscrireMedication');
-colorCukesMoc('@PrescripteurMiseAuSommaire');
-colorCukesMoc('@PrescripteurMonographie');
-colorCukesMoc('@PrescripteurNarcotique');
-colorCukesMoc('@PrescripteurOrdonnanceEnCours');
-colorCukesMoc('@PrescripteurPosologieTexte');
-colorCukesMoc('@PrescripteurPreference');
-colorCukesMoc('@PrescripteurPrescriptionTexte');
-colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
-colorCukesMoc('@PrescripteurPrescrireMedicationCodeException');
-colorCukesMoc('@PrescripteurPrescrireMedicationDuree');
-colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
-colorCukesMoc('@PrescripteurPrescrireMedicationInstruction');
-colorCukesMoc('@PrescripteurPrescrireMedicationNPS');
-colorCukesMoc('@PrescripteurPrescrireMedicationQuantite');
-colorCukesMoc('@PrescripteurPrescrireMedication');
-colorCukesMoc('@PrescripteurRechercherMedication');
-colorCukesMoc('@PrescripteurRenouveler');
-colorCukesMoc('@PrescripteurTogglz');
-colorCukesMoc('@PrescripteurToutSelectionner');
-colorCukesMoc('@PrescripteurVueArchive');
-colorCukesMoc('@PrescripteurVueProfil');
-colorCukesMoc('@PrescripteurVueRenouvelables');
-colorCukesMoc('@PrescripteurZoomMed');
-colorCukesMoc('@SQIIImpression');
-colorCukesMoc('@SQIIListeExamen');
-colorCukesMoc('@SQIITogglz');
-colorCukesMoc('@SQILImpression');
-colorCukesMoc('@SQILListeResultats');
-colorCukesMoc('@SQIMDetailGeneral');
-colorCukesMoc('@SQIMDetailHistorique');
-colorCukesMoc('@SQIMDetailMedications');
-colorCukesMoc('@SQIMDetailNotes');
-colorCukesMoc('@SQIMDetailProblemes');
-colorCukesMoc('@SQIMDetailRefus');
-colorCukesMoc('@SQIMSommaireMedications');
-colorCukesMoc('@DSQAcces');
-colorCukesMoc('@DSQ');
-colorCukesMoc('@SVActionLog');
-colorCukesMoc('@SVGrille');
-colorCukesMoc('@SVUniteMesure');
-colorCukesMoc('@SignesVitaux');
+colorCucumberTags();
