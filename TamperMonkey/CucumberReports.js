@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      1.2
+// @version      1.3
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier, nguillet 
 // @match        https://jenkins.omnimed.com/job/*/cucumber-html-reports/*overview-tags.html
@@ -227,9 +227,12 @@ colorCukesMoc('@PrescripteurPosologieTexte');
 colorCukesMoc('@PrescripteurPreference');
 colorCukesMoc('@PrescripteurPrescriptionTexte');
 colorCukesMoc('@PrescripteurPrescrireMedicationAvance');
+colorCukesMoc('@PrescripteurPrescrireMedicationCodeException');
+colorCukesMoc('@PrescripteurPrescrireMedicationDuree');
 colorCukesMoc('@PrescripteurPrescrireMedicationFinDeTraitement');
 colorCukesMoc('@PrescripteurPrescrireMedicationInstruction');
 colorCukesMoc('@PrescripteurPrescrireMedicationNPS');
+colorCukesMoc('@PrescripteurPrescrireMedicationQuantite');
 colorCukesMoc('@PrescripteurPrescrireMedication');
 colorCukesMoc('@PrescripteurRechercherMedication');
 colorCukesMoc('@PrescripteurRenouveler');
