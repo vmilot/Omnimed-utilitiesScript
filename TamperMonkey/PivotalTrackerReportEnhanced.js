@@ -18,7 +18,7 @@ $( document ).ready(function() {
 });
 
 function init() {
-    if ($("span[data-aid='stories-count']").length === 5) {
+    if ($("span[data-aid='stories-count']")[0]) {
         displayStats();
     } else {
         setTimeout(function() {
@@ -28,12 +28,12 @@ function init() {
 }
 
 function displayStats() {
-    var accepted = $("span[data-aid='stories-count']")[0].textContent.match(/\d+/g);
-    var delivered = $("span[data-aid='stories-count']")[1].textContent.match(/\d+/g);
-    var finished = $("span[data-aid='stories-count']")[2].textContent.match(/\d+/g);
-    var started = $("span[data-aid='stories-count']")[3].textContent.match(/\d+/g);
-    var unstarted = $("span[data-aid='stories-count']")[4].textContent.match(/\d+/g);
-    var iceboxed = $("span[data-aid='stories-count']")[5].textContent.match(/\d+/g);
+    var accepted = $("span[data-aid='stories-count']")[0] ? $("span[data-aid='stories-count']")[0].textContent.match(/\d+/g) : [0,0];
+    var delivered = $("span[data-aid='stories-count']")[1] ? $("span[data-aid='stories-count']")[1].textContent.match(/\d+/g) : [0,0];
+    var finished = $("span[data-aid='stories-count']")[2] ? $("span[data-aid='stories-count']")[2].textContent.match(/\d+/g) : [0,0];
+    var started = $("span[data-aid='stories-count']")[3] ? $("span[data-aid='stories-count']")[3].textContent.match(/\d+/g) : [0,0];
+    var unstarted = $("span[data-aid='stories-count']")[4] ? $("span[data-aid='stories-count']")[4].textContent.match(/\d+/g) : [0,0];
+    var iceboxed = $("span[data-aid='stories-count']")[5] ? $("span[data-aid='stories-count']")[5].textContent.match(/\d+/g) : [0,0];
 
     $('#stats').remove();
 
