@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.31
+// @version      0.32
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -124,31 +124,15 @@ function applyTemplate() {
     var storyType = $('.new').find("input[name='story[story_type]']")[0].value;
     setTimeout(function() {
         if (storyType === "feature") {
-            $('.new').find(".AutosizeTextarea__textarea___1LL2IPEy")[0].value = "En tant que [persona] je veux [action fait par l'utilisateur] afin de [valeur ajoutée ou besoin devant être comblé].\n" +
-                "\n" +
-                "ÉTANT DONNÉ que [contexte nécessaire et précondition de l'histoire]\n" +
-                "QUAND [actions]\n" +
-                "ALORS [réactions/résultats]\n" +
-                "\n" +
-                "**Notes AQ**\n" +
-                "[Index de fonctionnalité et autres notes nécessaires à la validation de l'histoire]\n" +
-                "\n" +
-                "**Notes DEV**\n" +
-                "[Notes techniques pertinentes pour les développeurs]\n" +
-                "\n" +
-                "**Notes Design**\n" +
-                "[Lien vers les wireframes ou maquettes de l'histoire]\n" +
-                "\n" +
-                "**Notes Comms**\n" +
-                "[Lien vers le Google Docs des textes à vérifier]";
+            if ( $('.new').find("div[class='Label___3rBeC38h Label--epic___2XSEYZ9W']")[0].children[0].outerText === "analyse") {
+                $(document.activeElement).val(getAnalyseTemplate()).change();
+            } else {
+                $(document.activeElement).val(getFeatureTemplate()).change();
+            }
         } else if (storyType === "chore") {
-            $('.new').find(".AutosizeTextarea__textarea___1LL2IPEy")[0].value = "**Pourquoi c'est nécessaire**\n" +
-                "\n" +
-                "**Impact et dépendances**\n" +
-                "\n" +
-                "**Références**\n";
+            $(document.activeElement).val(getFeatureTemplate()).change();
         } else if (storyType === "bug") {
-            $('.new').find(".AutosizeTextarea__textarea___1LL2IPEy")[0].value = getBugTemplate();
+            (document.activeElement).val(getBugTemplate()).change();
         }
     }, 100);
     $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup']").unbind("click");
@@ -157,13 +141,60 @@ function applyTemplate() {
 
 function bindNewTextarea() {
     if ($('.new')) {
-        $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup']").bind("click", applyTemplate);
-        $('.new').find("div[class='edit___2HbkmNDA']").bind("click", applyTemplate);
+        $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup DescriptionShow__placeholder___1NuiicbF']").bind("click", applyTemplate);
     }
 }
 
 function getBug() {
     return $('div[data-type="done"],div[data-type="current"],div[data-type="backlog"],div[data-type="icebox"]').find('.bug').children('.preview').children('.selected').parent();
+}
+
+function getAnalyseTemplate() {
+	if(!bugTemplate) {
+		var response;
+		var xhr = new XMLHttpRequest();
+
+		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/3355739", false);
+		xhr.send();
+
+		response = JSON.parse(xhr.responseText);
+
+		bugTemplate = response.description;
+	}
+
+	return bugTemplate;
+}
+
+function getFeatureTemplate() {
+	if(!bugTemplate) {
+		var response;
+		var xhr = new XMLHttpRequest();
+
+		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388831", false);
+		xhr.send();
+
+		response = JSON.parse(xhr.responseText);
+
+		bugTemplate = response.description;
+	}
+
+	return bugTemplate;
+}
+
+function getChoreTemplate() {
+	if(!bugTemplate) {
+		var response;
+		var xhr = new XMLHttpRequest();
+
+		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388835", false);
+		xhr.send();
+
+		response = JSON.parse(xhr.responseText);
+
+		bugTemplate = response.description;
+	}
+
+	return bugTemplate;
 }
 
 function getBugTemplate() {
