@@ -18,7 +18,7 @@ $( document ).ready(function() {
 });
 
 function init() {
-    if ($("span[data-aid='stories-count']")[0]) {
+    if ($("span[data-aid='stories-count']").length === 5) {
         displayStats();
     } else {
         setTimeout(function() {
