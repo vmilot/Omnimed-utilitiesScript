@@ -132,7 +132,7 @@ function applyTemplate() {
         } else if (storyType === "chore") {
             $(document.activeElement).val(getFeatureTemplate()).change();
         } else if (storyType === "bug") {
-            (document.activeElement).val(getBugTemplate()).change();
+            $(document.activeElement).val(getBugTemplate()).change();
         }
     }, 100);
     $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup']").unbind("click");
