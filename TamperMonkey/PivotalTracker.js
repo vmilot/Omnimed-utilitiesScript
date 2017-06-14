@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.33
+// @version      0.34
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -9,7 +9,10 @@
 // ==/UserScript==
 
 var $ = jQuery;
+var analyseTemplate;
 var bugTemplate;
+var choreTemplate;
+var featureTemplate;
 var countStory = 0;
 var countChore = 0;
 var countBug = 0;
@@ -130,7 +133,7 @@ function applyTemplate() {
                 $(document.activeElement).val(getFeatureTemplate()).change();
             }
         } else if (storyType === "chore") {
-            $(document.activeElement).val(getFeatureTemplate()).change();
+            $(document.activeElement).val(getChoreTemplate()).change();
         } else if (storyType === "bug") {
             $(document.activeElement).val(getBugTemplate()).change();
         }
@@ -150,7 +153,7 @@ function getBug() {
 }
 
 function getAnalyseTemplate() {
-	if(!bugTemplate) {
+	if(!analyseTemplate) {
 		var response;
 		var xhr = new XMLHttpRequest();
 
@@ -159,14 +162,14 @@ function getAnalyseTemplate() {
 
 		response = JSON.parse(xhr.responseText);
 
-		bugTemplate = response.description;
+		analyseTemplate = response.description;
 	}
 
-	return bugTemplate;
+	return analyseTemplate;
 }
 
 function getFeatureTemplate() {
-	if(!bugTemplate) {
+	if(!featureTemplate) {
 		var response;
 		var xhr = new XMLHttpRequest();
 
@@ -175,14 +178,14 @@ function getFeatureTemplate() {
 
 		response = JSON.parse(xhr.responseText);
 
-		bugTemplate = response.description;
+		featureTemplate = response.description;
 	}
 
-	return bugTemplate;
+	return featureTemplate;
 }
 
 function getChoreTemplate() {
-	if(!bugTemplate) {
+	if(!choreTemplate) {
 		var response;
 		var xhr = new XMLHttpRequest();
 
@@ -191,10 +194,10 @@ function getChoreTemplate() {
 
 		response = JSON.parse(xhr.responseText);
 
-		bugTemplate = response.description;
+		choreTemplate = response.description;
 	}
 
-	return bugTemplate;
+	return choreTemplate;
 }
 
 function getBugTemplate() {
