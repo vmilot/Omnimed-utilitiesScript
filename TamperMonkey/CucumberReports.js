@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Cucumber pimper
 // @namespace    http://tampermonkey.net/
-// @version      1.6
+// @version      1.7
 // @description  Pimp cucumber reports
 // @author       mquiron, mcormier, nguillet shenault
 // @match        https://jenkins.omnimed.com/job/*/cucumber-html-reports/*overview-tags.html
@@ -31,71 +31,71 @@ function colorCucumberTagForQA(tag, qa) {
 }
 
 function colorCucumberTags() {
-	colorCucumberTagForQA('Aide', 'Nic');
+	colorCucumberTagForQA('Aide', 'Val');
 	colorCucumberTagForQA('AjoutResultat', 'Val');
-	colorCucumberTagForQA('Allergie', 'Val');
-	colorCucumberTagForQA('Antecedents', 'Val');
-	colorCucumberTagForQA('Aviseur', 'Moc');
+	colorCucumberTagForQA('Allergie', 'Nic');
+	colorCucumberTagForQA('Antecedents', 'Nic');
+	colorCucumberTagForQA('Aviseur', 'Val');
 
 	colorCucumberTagForQA('Beta', 'Moc');
 
-	colorCucumberTagForQA('CA', 'Nic');
-	colorCucumberTagForQA('CAS', 'Nic');
-	colorCucumberTagForQA('CentreAdmin', 'Nic');
-	colorCucumberTagForQA('ChampConfidentiel', 'Nic');
-	colorCucumberTagForQA('Compte', 'Nic');
+	colorCucumberTagForQA('CA', 'Moc');
+	colorCucumberTagForQA('CAS', 'Moc');
+	colorCucumberTagForQA('CentreAdmin', 'Moc');
+	colorCucumberTagForQA('ChampConfidentiel', 'Val');
+	colorCucumberTagForQA('Compte', 'Moc');
 
-	colorCucumberTagForQA('Dictionnaire', 'Moc');
-	colorCucumberTagForQA('Droits', 'Nic');
-	colorCucumberTagForQA('DSQ', 'Moc');
+	colorCucumberTagForQA('Dictionnaire', 'Nic');
+	colorCucumberTagForQA('Droits', 'Val');
+	colorCucumberTagForQA('DSQ', 'Nic');
 
     colorCucumberTagForQA('Elevio', 'Moc');
-	colorCucumberTagForQA('Etiquette', 'Nic');
+	colorCucumberTagForQA('Etiquette', 'Val');
 
-	colorCucumberTagForQA('GuideUtilisateur', 'Val');
+	colorCucumberTagForQA('GuideUtilisateur', 'Moc');
 
-	colorCucumberTagForQA('HabitudesDeVie', 'Nic');
+	colorCucumberTagForQA('HabitudesDeVie', 'Val');
 
-	colorCucumberTagForQA('Immunisation', 'Val');
+	colorCucumberTagForQA('Immunisation', 'Nic');
 
 	colorCucumberTagForQA('ListeResultat', 'Val');
     colorCucumberTagForQA('LR', 'Val');
-	colorCucumberTagForQA('ListeTaches', 'Nic');
+	colorCucumberTagForQA('ListeTaches', 'Moc');
 
-	colorCucumberTagForQA('MaladieChronique', 'Nic');
+	colorCucumberTagForQA('MaladieChronique', 'Val');
 
-	colorCucumberTagForQA('NC', 'Nic');
-	colorCucumberTagForQA('Note', 'Nic');
+	colorCucumberTagForQA('NC', 'Val');
+	colorCucumberTagForQA('Note', 'Val');
 	colorCucumberTagForQA('Notification', 'Moc');
-	colorCucumberTagForQA('Nouvelles', 'Moc');
+	colorCucumberTagForQA('Nouvelles', 'Val');
 
-	colorCucumberTagForQA('OC', 'Nic');
+	colorCucumberTagForQA('OC', 'Val');
 
-	colorCucumberTagForQA('Patient', 'Nic');
-	colorCucumberTagForQA('Prescripteur', 'Moc');
-	colorCucumberTagForQA('Problemes', 'Val');
-	colorCucumberTagForQA('Profil', 'Nic');
-	colorCucumberTagForQA('Programmes', 'Nic');
+	colorCucumberTagForQA('Patient', 'Moc');
+	colorCucumberTagForQA('Prescripteur', 'Nic');
+	colorCucumberTagForQA('Problemes', 'Nic');
+	colorCucumberTagForQA('Profil', 'Moc');
+	colorCucumberTagForQA('Programmes', 'Moc');
 
-	colorCucumberTagForQA('RendezVous', 'Nic');
+	colorCucumberTagForQA('RendezVous', 'Val');
 	colorCucumberTagForQA('Resultat', 'Val');
-	colorCucumberTagForQA('RevisionNotes', 'Nic');
+	colorCucumberTagForQA('RevisionNotes', 'Val');
 	colorCucumberTagForQA('RevisionResultats', 'Val');
-	colorCucumberTagForQA('RevisionTaches', 'Nic');
+	colorCucumberTagForQA('RevisionTaches', 'Moc');
     colorCucumberTagForQA('RR', 'Val');
 
-	colorCucumberTagForQA('SalleDAttente', 'Nic');
+	colorCucumberTagForQA('SalleDAttente', 'Val');
 	colorCucumberTagForQA('SmokedTest', 'Nic');
-	colorCucumberTagForQA('SQII', 'Moc');
-	colorCucumberTagForQA('SQIL', 'Moc');
-	colorCucumberTagForQA('SQIM', 'Moc');
-	colorCucumberTagForQA('SignesVitaux', 'Moc');
+	colorCucumberTagForQA('SQII', 'Nic');
+	colorCucumberTagForQA('SQIL', 'Nic');
+	colorCucumberTagForQA('SQIM', 'Nic');
+	colorCucumberTagForQA('SignesVitaux', 'Nic');
 	colorCucumberTagForQA('SuppressionResultat', 'Val');
-	colorCucumberTagForQA('SV', 'Moc');
+	colorCucumberTagForQA('SV', 'Nic');
 
-	colorCucumberTagForQA('Taches', 'Nic');
+	colorCucumberTagForQA('Taches', 'Moc');
 
-	colorCucumberTagForQA('UMF', 'Nic');
+	colorCucumberTagForQA('UMF', 'Val');
 }
 
 colorCucumberTags();
