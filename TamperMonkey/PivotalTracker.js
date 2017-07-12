@@ -1,11 +1,11 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.34
+// @version      0.35
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
-// @grant        none
+// @grant        unsafeWindow
 // ==/UserScript==
 
 var $ = jQuery;
@@ -21,6 +21,7 @@ var sumStory = 0;
 var sumChore = 0;
 var sumBug = 0;
 var sumTotal = 0;
+var inApiCall = false;
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -59,7 +60,66 @@ function updateFlyoverIcons() {
 
 function validateStories() {
     /* Validate that all stories have a release tag */
-	$('.story.delivered, .story.finished, .story.started').not(':has(a:contains("' + getReleaseName() + '")), :has(a:contains("patch"))').addClass('invalidStory');
+    var firstId;
+    var secondId;
+    var releaseName;
+    var response;
+    var xhr = new XMLHttpRequest();
+
+    if (!inApiCall) {
+        inApiCall = true;
+        $.ajax ( {
+            type:       'GET',
+            url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=accepted&offset=-1',
+            dataType:   'JSON',
+            success:    function (response) {
+                firstId = response[0].id;
+                $.ajax ( {
+                    type:       'GET',
+                    url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=planned',
+                    dataType:   'JSON',
+                    success:    function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            secondId = response[i].id;
+                            releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
+                            $.ajax ( {
+                                type:       'GET',
+                                url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
+                                dataType:   'JSON',
+                                releaseName: releaseName,
+                                success:    function (response) {
+                                    applyStoriesValidation(response, this.releaseName);
+                                }
+                            } );
+                            firstId = secondId;
+                        }
+                        $.ajax ( {
+                            type:       'GET',
+                            url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=unstarted',
+                            dataType:   'JSON',
+                            success:    function (response) {
+                                for (var i = 0; i < response.length; i++) {
+                                    secondId = response[i].id;
+                                    releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
+                                    $.ajax ( {
+                                        type:       'GET',
+                                        url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
+                                        dataType:   'JSON',
+                                        releaseName: releaseName,
+                                        success:    function (response) {
+                                            applyStoriesValidation(response, this.releaseName);
+                                        }
+                                    } );
+                                    firstId = secondId;
+                                }
+                            }
+                        } );
+                    }
+                } );
+            }
+        } );
+        inApiCall = false;
+    }
 }
 
 function highlightLabelsNeedSomething() {
@@ -69,7 +129,7 @@ function highlightLabelsNeedSomething() {
 
 
 $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
-    if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
+    if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || xhr.responseJSON.data.kind === "command_create_response" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
         $('body').find("a[title*='Add Story']").unbind("click");
         $('body').find("a[title*='Add Story']").bind("click", function(){
             setTimeout(function() {
@@ -91,8 +151,8 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
                 update_output();
             }, 100);
         });setTimeout(function() {
-                updateFlyoverIcons();
-            }, 1100);
+            updateFlyoverIcons();
+        }, 1100);
         $('.expander.undraggable').unbind("click");
         $('.expander.undraggable').bind("click", function(){
             setTimeout(function() {
@@ -110,10 +170,8 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
         $('.bug,.chore,.feature').bind("mouseenter", function(){
             setTimeout(function() {
                 updateFlyoverIcons();
-                validateStories();
                 setTimeout(function() {
                     updateFlyoverIcons();
-                    validateStories();
                 }, 500);
             }, 1100);
         });
@@ -153,67 +211,67 @@ function getBug() {
 }
 
 function getAnalyseTemplate() {
-	if(!analyseTemplate) {
-		var response;
-		var xhr = new XMLHttpRequest();
+    if(!analyseTemplate) {
+        var response;
+        var xhr = new XMLHttpRequest();
 
-		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/3355739", false);
-		xhr.send();
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/3355739", false);
+        xhr.send();
 
-		response = JSON.parse(xhr.responseText);
+        response = JSON.parse(xhr.responseText);
 
-		analyseTemplate = response.description;
-	}
+        analyseTemplate = response.description;
+    }
 
-	return analyseTemplate;
+    return analyseTemplate;
 }
 
 function getFeatureTemplate() {
-	if(!featureTemplate) {
-		var response;
-		var xhr = new XMLHttpRequest();
+    if(!featureTemplate) {
+        var response;
+        var xhr = new XMLHttpRequest();
 
-		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388831", false);
-		xhr.send();
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388831", false);
+        xhr.send();
 
-		response = JSON.parse(xhr.responseText);
+        response = JSON.parse(xhr.responseText);
 
-		featureTemplate = response.description;
-	}
+        featureTemplate = response.description;
+    }
 
-	return featureTemplate;
+    return featureTemplate;
 }
 
 function getChoreTemplate() {
-	if(!choreTemplate) {
-		var response;
-		var xhr = new XMLHttpRequest();
+    if(!choreTemplate) {
+        var response;
+        var xhr = new XMLHttpRequest();
 
-		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388835", false);
-		xhr.send();
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388835", false);
+        xhr.send();
 
-		response = JSON.parse(xhr.responseText);
+        response = JSON.parse(xhr.responseText);
 
-		choreTemplate = response.description;
-	}
+        choreTemplate = response.description;
+    }
 
-	return choreTemplate;
+    return choreTemplate;
 }
 
 function getBugTemplate() {
-	if(!bugTemplate) {
-		var response;
-		var xhr = new XMLHttpRequest();
+    if(!bugTemplate) {
+        var response;
+        var xhr = new XMLHttpRequest();
 
-		xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388833", false);
-		xhr.send();
+        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics/388833", false);
+        xhr.send();
 
-		response = JSON.parse(xhr.responseText);
+        response = JSON.parse(xhr.responseText);
 
-		bugTemplate = response.description;
-	}
+        bugTemplate = response.description;
+    }
 
-	return bugTemplate;
+    return bugTemplate;
 }
 
 function getChore() {
@@ -231,65 +289,54 @@ function getInfoFromUrl(url) {
 }
 
 function getEpicInfo(epicLabel) {
-  var xhr = new XMLHttpRequest();
-  var label = epicLabel;
-  if (epicLabel.indexOf("ep - ") > -1) {
-    label = epicLabel.substring(5);
-  }
-  xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(label) + "%22&fields=name%2Cdescription%2Ccompleted_at", false);
-  xhr.send();
+    var xhr = new XMLHttpRequest();
+    var label = epicLabel;
+    if (epicLabel.indexOf("ep - ") > -1) {
+        label = epicLabel.substring(5);
+    }
+    xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/epics?filter=label%3A%22" + encodeURI(label) + "%22&fields=name%2Cdescription%2Ccompleted_at", false);
+    xhr.send();
 
-  var response = JSON.parse(xhr.responseText);
-  return response;
+    var response = JSON.parse(xhr.responseText);
+    return response;
 }
 
-function getReleaseName() {
-    if (!releaseName) {
-        var releaseLongName;
-        var response;
-        var xhr = new XMLHttpRequest();
-
-        xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=planned", false);
-        xhr.send();
-
-        response = JSON.parse(xhr.responseText);
-        releaseLongName = response[0].name;
-
-        releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
-        
-        if (!releaseName){
-            xhr.open("GET", "https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=unstarted", false);
-            xhr.send();
-
-            response = JSON.parse(xhr.responseText);
-            releaseLongName = response[0].name;
-
-            releaseName = releaseLongName.substring(0, releaseLongName.lastIndexOf(" ")).toLowerCase();
+function applyStoriesValidation(stories,releaseName) {
+    /* Validate that all stories have a release tag */
+    for (var i = 0; i < stories.length; i++) {
+        var hasGoodLabel = false;
+        for (var j = 0; j < stories[i].labels.length; j++) {
+            if (stories[i].labels[j].name === releaseName) {
+                hasGoodLabel = true;
+            }
+        }
+        if (!hasGoodLabel && !$('div[data-id="' + stories[i].id +'"]').hasClass('invalidStory')) {
+            $('div[data-id="' + stories[i].id +'"]').addClass('invalidStory');
+        }
+        if (hasGoodLabel && $('div[data-id="' + stories[i].id +'"]').hasClass('invalidStory')) {
+            $('div[data-id="' + stories[i].id +'"]').removeClass('invalidStory');
         }
     }
-    
-    return releaseName;
 }
-
 
 function addReleaseNoteTicketInfo(parameter) {
     var releaseNote = "";
     if (parameter.addLabel) {
-      parameter.addLabel = false;
-      var episode = getEpicInfo(parameter.episode.toString());
-      if (episode.length > 0) {
-        releaseNote += "\n### " + episode[0].name;
-        if (episode[0].completed_at) {
-          releaseNote += " - Complété\n";
+        parameter.addLabel = false;
+        var episode = getEpicInfo(parameter.episode.toString());
+        if (episode.length > 0) {
+            releaseNote += "\n### " + episode[0].name;
+            if (episode[0].completed_at) {
+                releaseNote += " - Complété\n";
+            } else {
+                releaseNote += "\n";
+            }
+            if (episode[0].description) {
+                releaseNote += episode[0].description + "\n\n";
+            }
         } else {
-          releaseNote += "\n";
+            releaseNote += "\n### " + parameter.episode.toString() + "\n\n";
         }
-        if (episode[0].description) {
-          releaseNote += episode[0].description + "\n\n";
-        }
-      } else {
-        releaseNote += "\n### " + parameter.episode.toString() + "\n\n";
-      }
     }
     releaseNote += " * " + parameter.ticket.name + " [https://www.pivotaltracker.com/story/show/" + parameter.ticket.id + "]\n";
     return releaseNote;
@@ -425,30 +472,30 @@ $.getReleaseNote = function() {
     $.each($.unique(produits.sort()), function() {
         releaseNote += "\n## " + this + "\n\n";
         var produit = this;
-          $.each($.unique(eps), function() {
-              var parameter = {
+        $.each($.unique(eps), function() {
+            var parameter = {
                 addLabel: true,
                 episode: this,
                 ticket: ''};
-              var i = 0;
-              for (i = 0; i < stories.length; i++) {
-                  if (stories[i].prd == produit) {
-                      if (stories[i].ep == this) {
+            var i = 0;
+            for (i = 0; i < stories.length; i++) {
+                if (stories[i].prd == produit) {
+                    if (stories[i].ep == this) {
                         parameter.ticket = stories[i];
                         releaseNote += addReleaseNoteTicketInfo(parameter);
-                      }
-                  }
-              }
-              i = 0;
-              for (i = 0; i < chores.length; i++) {
-                  if (chores[i].prd == produit) {
-                      if (chores[i].ep == this) {
+                    }
+                }
+            }
+            i = 0;
+            for (i = 0; i < chores.length; i++) {
+                if (chores[i].prd == produit) {
+                    if (chores[i].ep == this) {
                         parameter.ticket = chores[i];
                         releaseNote += addReleaseNoteTicketInfo(parameter);
-                      }
-                  }
-              }
-          });
+                    }
+                }
+            }
+        });
     });
 
     releaseNote += "\n## Corrections de bogues\n\n";
@@ -511,12 +558,12 @@ $.getSprintSheet = function() {
     $.each($.unique(eps.sort()), function() {
         var episode = getEpicInfo(this.toString());
         if (episode.length > 0) {
-          sprintSheet += "* " + episode[0].name + "\n";
-          if (episode[0].description) {
-            sprintSheet += " * " + episode[0].description + "\n";
-          }
+            sprintSheet += "* " + episode[0].name + "\n";
+            if (episode[0].description) {
+                sprintSheet += " * " + episode[0].description + "\n";
+            }
         } else {
-          sprintSheet += "* " + this + "\n";
+            sprintSheet += "* " + this + "\n";
         }
     });
 
@@ -553,12 +600,12 @@ $.getSprintSheet = function() {
     $.each($.unique(eps.sort()), function() {
         var episode = getEpicInfo(this.toString());
         if (episode.length > 0) {
-          sprintSheet += "* " + episode[0].name + "\n";
-          if (episode[0].description) {
-            sprintSheet += " * " + episode[0].description + "\n";
-          }
+            sprintSheet += "* " + episode[0].name + "\n";
+            if (episode[0].description) {
+                sprintSheet += " * " + episode[0].description + "\n";
+            }
         } else {
-          sprintSheet += "* " + this + "\n";
+            sprintSheet += "* " + this + "\n";
         }
     });
 
@@ -600,7 +647,7 @@ $.getPlanningPoker = function() {
         var story = {name:"", ep:"", id:""};
         story.id = $(this).parent().parent().attr("data-id");
         story.name = $(this).children('.story_name').text();
-            planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + story.id + "'>" + story.name + "</a>\n";
+        planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + story.id + "'>" + story.name + "</a>\n";
     });
 
     var chores = [];
@@ -608,7 +655,7 @@ $.getPlanningPoker = function() {
         var chore = {name:"", ep:"", id:""};
         chore.id = $(this).parent().parent().attr("data-id");
         chore.name = $(this).children('.story_name').text();
-            planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + chore.id + "'>" + chore.name + "</a>\n";
+        planningPokerList += "<a target='_blank' href='https://www.pivotaltracker.com/story/show/" + chore.id + "'>" + chore.name + "</a>\n";
     });
 
     console.clear();
