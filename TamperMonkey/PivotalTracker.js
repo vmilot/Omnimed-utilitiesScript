@@ -21,6 +21,7 @@ var sumStory = 0;
 var sumChore = 0;
 var sumBug = 0;
 var sumTotal = 0;
+var inApiCall = false;
 
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -65,56 +66,60 @@ function validateStories() {
     var response;
     var xhr = new XMLHttpRequest();
 
-    $.ajax ( {
-        type:       'GET',
-        url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=accepted&offset=-1',
-        dataType:   'JSON',
-        success:    function (response) {
-            firstId = response[0].id;
-            $.ajax ( {
-                type:       'GET',
-                url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=planned',
-                dataType:   'JSON',
-                success:    function (response) {
-                    for (var i = 0; i < response.length; i++) {
-                        secondId = response[i].id;
-                        releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
+    if (!inApiCall) {
+        inApiCall = true;
+        $.ajax ( {
+            type:       'GET',
+            url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?limit=1&with_state=accepted&offset=-1',
+            dataType:   'JSON',
+            success:    function (response) {
+                firstId = response[0].id;
+                $.ajax ( {
+                    type:       'GET',
+                    url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=planned',
+                    dataType:   'JSON',
+                    success:    function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            secondId = response[i].id;
+                            releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
+                            $.ajax ( {
+                                type:       'GET',
+                                url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
+                                dataType:   'JSON',
+                                releaseName: releaseName,
+                                success:    function (response) {
+                                    applyStoriesValidation(response, this.releaseName);
+                                }
+                            } );
+                            firstId = secondId;
+                        }
                         $.ajax ( {
                             type:       'GET',
-                            url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
+                            url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=unstarted',
                             dataType:   'JSON',
-                            releaseName: releaseName,
                             success:    function (response) {
-                                applyStoriesValidation(response, this.releaseName);
+                                for (var i = 0; i < response.length; i++) {
+                                    secondId = response[i].id;
+                                    releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
+                                    $.ajax ( {
+                                        type:       'GET',
+                                        url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
+                                        dataType:   'JSON',
+                                        releaseName: releaseName,
+                                        success:    function (response) {
+                                            applyStoriesValidation(response, this.releaseName);
+                                        }
+                                    } );
+                                    firstId = secondId;
+                                }
                             }
                         } );
-                        firstId = secondId;
                     }
-                    $.ajax ( {
-                        type:       'GET',
-                        url:        'https://www.pivotaltracker.com/services/v5/projects/605365/releases?with_state=unstarted',
-                        dataType:   'JSON',
-                        success:    function (response) {
-                            for (var i = 0; i < response.length; i++) {
-                                secondId = response[i].id;
-                                releaseName = response[i].name.substring(0, response[i].name.lastIndexOf(" ")).toLowerCase();
-                                $.ajax ( {
-                                    type:       'GET',
-                                    url:        'https://www.pivotaltracker.com/services/v5/projects/605365/stories?after_story_id=' + firstId + '&before_story_id=' + secondId + '&limit=10000',
-                                    dataType:   'JSON',
-                                    releaseName: releaseName,
-                                    success:    function (response) {
-                                        applyStoriesValidation(response, this.releaseName);
-                                    }
-                                } );
-                                firstId = secondId;
-                            }
-                        }
-                    } );
-                }
-            } );
-        }
-    } );
+                } );
+            }
+        } );
+        inApiCall = false;
+    }
 }
 
 function highlightLabelsNeedSomething() {
