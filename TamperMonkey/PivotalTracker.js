@@ -124,7 +124,7 @@ function highlightLabelsNeedSomething() {
 
 
 $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
-    if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
+    if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || xhr.responseJSON.data.kind === "command_create_response" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
         $('body').find("a[title*='Add Story']").unbind("click");
         $('body').find("a[title*='Add Story']").bind("click", function(){
             setTimeout(function() {
@@ -165,10 +165,8 @@ $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
         $('.bug,.chore,.feature').bind("mouseenter", function(){
             setTimeout(function() {
                 updateFlyoverIcons();
-                validateStories();
                 setTimeout(function() {
                     updateFlyoverIcons();
-                    validateStories();
                 }, 500);
             }, 1100);
         });
