@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.35
+// @version      0.36
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -40,7 +40,7 @@ $( document ).ready(function() {
     $("<style type='text/css'> .analyseIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/analyse.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .shadowIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/shadow.png) !important;} </style>").appendTo("head");
     $("<style type='text/css'> .onAirIcon:before{ background-image:url(https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/TamperMonkey/image/onair.png) !important;} </style>").appendTo("head");
-    $("<style type='text/css'> .invalidStory .preview { background-color: #B8860B !important;} </style>").appendTo("head");
+    $("<style type='text/css'> .invalidStory .preview { background-color: #fb9595 !important;} </style>").appendTo("head");
     $("<style type='text/css'> .labelNeed { background-color: red !important; color: white !important; border-radius: 5px ; padding: 0px 5px 0px 5px; margin-right: 2px; } </style>").appendTo("head");
 });
 
