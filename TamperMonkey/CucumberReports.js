@@ -78,6 +78,7 @@ function colorCucumberTags() {
 	colorCucumberTagForQA('Programmes', 'Val');
 
 	colorCucumberTagForQA('RendezVous', 'Val');
+	colorCucumberTagForQA('Requete', 'Moc');
 	colorCucumberTagForQA('Resultat', 'Val');
 	colorCucumberTagForQA('RevisionNotes', 'Val');
 	colorCucumberTagForQA('RevisionResultats', 'Val');
