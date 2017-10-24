@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.36
+// @version      0.37
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -391,11 +391,12 @@ function update_output() {
     sumTotal = sumBug + sumChore + sumStory;
     $('.selectedStoriesControls__actions').css({"padding-left":"158px"});
     $('.selectedStoriesControls__counterLabel').append("<span id='story_Selected_sum' style='margin-left: 7px;'><span style='font-weight:bold;'>Story :</span> " + sumStory + "/" + countStory + " | <span style='font-weight:bold;'>Chore :</span> " + sumChore + "/" + countChore + " | <span style='font-weight:bold;'>Bug :</span> " + sumBug + "/" + countBug + " | <span style='font-weight:bold;'>Total</span> : " + sumTotal +
-                                                       "<div style='position: absolute;left: 46px;background-color: chocolate;width: 421px;height: 20px;padding-top: 2px;'>" +
+                                                       "<div style='position: absolute;left: 46px;background-color: chocolate;width: 531px;height: 20px;padding-top: 2px;'>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getReleaseNote()'>Release note</button>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getSprintSheet()'>Sprint sheet</button>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getPlanningPoker()'>PlanningPoker</button>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getDiff()'>Diff</button>" +
+                                                       "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getBroadcastNote()'>Broadcast note</button>" +
                                                        "</div>" +
                                                        "</span>");
 }
@@ -744,5 +745,126 @@ $.getDiff = function() {
         console.log(diffSheet);
         executeCopy(diffSheet);
     }
+};
+
+$.getBroadcastNote = function() {
+    var broadcastNote = "Nom de code : \nDate de déploiement visée : \nVersion de chrome supportée : \n\n";
+    var broadcasts = [];
+    var stories = [];
+    var togglz = [];
+    getFeature().children('.name').each(function(){
+        var story = {name:"", broadcast:"", ep:"", id:""};
+        story.id = $(this).parent().parent().attr("data-id");
+        story.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        story.name = $(this).children('.story_name').text();
+        story.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (story.ep === "") {
+            story.ep ="ep - autre";
+        } else if (story.ep.indexOf(",") > -1) {
+            story.ep = story.ep.substring(0,story.ep.indexOf(","));
+        }
+        stories.push(story);
+        if (story.broadcast === "") {
+            togglz.push(story);
+        } else {
+            broadcasts.push(story.broadcast);            
+        }
+    });
+    stories.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+
+    var chores = [];
+    getChore().children('.name').each(function(){
+        var chore = {name:"", broadcast:"", ep:"", id:""};
+        chore.id = $(this).parent().parent().attr("data-id");
+        chore.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        chore.name = $(this).children('.story_name').text();
+        chore.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (chore.ep === "") {
+            chore.ep ="ep - autre";
+        } else if (chore.ep.indexOf(",") > -1) {
+            chore.ep = chore.ep.substring(0,chore.ep.indexOf(","));
+        }
+        chores.push(chore);
+        if (chore.broadcast === "") {
+            togglz.push(chore);
+        } else {
+            broadcasts.push(chore.broadcast);            
+        }
+    });
+    chores.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+
+    var bugs = [];
+    getBug().children('.name').each(function(){
+        var bug = {name:"", broadcast:"", ep:"", id:""};
+        bug.id = $(this).parent().parent().attr("data-id");
+        bug.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        bug.name = $(this).children('.story_name').text();
+        bug.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
+        if (bug.ep === "") {
+            bug.ep ="ep - autre";
+        } else if (bug.ep.indexOf(",") > -1) {
+            bug.ep = bug.ep.substring(0,bug.ep.indexOf(","));
+        }
+        $(this).children('.labels.pre').children('a:contains("bugprod")').each(function() {
+            bugs.push(bug);
+            if (bug.broadcast === "") {
+                togglz.push(bug);
+            } else {
+                broadcasts.push(bug.broadcast);            
+            }
+        });
+    });
+    bugs.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+
+    togglz.sort(function (a, b) {
+        return a.name.localeCompare( b.name );
+    });
+    
+    if (stories.length > 0) {
+        broadcastNote = capitalizeFirstLetter(stories[0].ep);
+    } else if (chores.length > 0) {
+        broadcastNote = capitalizeFirstLetter(chores[0].ep);
+    } else {
+        broadcastNote = "No stories or chores";
+    }
+
+    broadcastNote = broadcastNote + '\n\n';
+
+    $.each($.unique(broadcasts.sort()), function() {
+        broadcastNote += "\n## " + this + "\n\n";
+        var broadcast = this;
+        var i = 0;
+        for (i = 0; i < stories.length; i++) {
+            if (stories[i].broadcast == broadcast) {
+                broadcastNote += " * " + stories[i].name + " [https://www.pivotaltracker.com/story/show/" + stories[i].id + "]\n";
+            }
+        }
+        i = 0;
+        for (i = 0; i < chores.length; i++) {
+            if (chores[i].broadcast == broadcast) {
+                broadcastNote += " * " + chores[i].name + " [https://www.pivotaltracker.com/story/show/" + chores[i].id + "]\n";
+            }
+        }
+        i = 0;
+        for (i = 0; i < bugs.length; i++) {
+            if (bugs[i].broadcast == broadcast) {
+                broadcastNote += " * " + bugs[i].name + " [https://www.pivotaltracker.com/story/show/" + bugs[i].id + "]\n";
+            }
+        }
+    });
+
+    broadcastNote += "\n## Togglz\n\n";
+    $.each(togglz, function() {
+        broadcastNote += " * " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
+    });
+    console.clear();
+    console.log(broadcastNote);
+    executeCopy(broadcastNote);
 };
 
