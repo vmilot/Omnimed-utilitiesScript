@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.37
+// @version      0.38
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -402,7 +402,7 @@ function update_output() {
 }
 
 $.getReleaseNote = function() {
-    var releaseNote = "Nom de code : \nDate de déploiement visée : \nVersion de chrome supportée : \n\n";
+    var releaseNote = "Date de déploiement visée : \nVersion de chrome supportée : \n\n";
     var eps = [];
     var produits = [];
     var stories = [];
@@ -748,14 +748,20 @@ $.getDiff = function() {
 };
 
 $.getBroadcastNote = function() {
-    var broadcastNote = "Nom de code : \nDate de déploiement visée : \nVersion de chrome supportée : \n\n";
+    var broadcastNote = "Date de déploiement visée : \nVersion de chrome supportée : \n\n";
     var broadcasts = [];
     var stories = [];
     var togglz = [];
+    var version = [];
+
     getFeature().children('.name').each(function(){
-        var story = {name:"", broadcast:"", ep:"", id:""};
+        var story = {name:"", broadcast:"", ep:"", id:"", version:""};
         story.id = $(this).parent().parent().attr("data-id");
+        debugger;
         story.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        if (story.broadcast.indexOf(",") > -1){
+            story.broadcast = story.broadcast.substring(0,story.broadcast.indexOf(","));
+        }
         story.name = $(this).children('.story_name').text();
         story.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
         if (story.ep === "") {
@@ -763,11 +769,21 @@ $.getBroadcastNote = function() {
         } else if (story.ep.indexOf(",") > -1) {
             story.ep = story.ep.substring(0,story.ep.indexOf(","));
         }
+        
+        story.version = capitalizeFirstLetter($(this).children('.labels').children('a:contains("v -")').first().text());
+         if (story.version.indexOf(",") > -1){
+            story.version = story.version.substring(0,story.version.indexOf(","));
+        }
+
         stories.push(story);
+        
         if (story.broadcast === "") {
             togglz.push(story);
+            if (story.version != "") {
+                version.push(story.version);
+            }
         } else {
-            broadcasts.push(story.broadcast);            
+            broadcasts.push(story.broadcast);
         }
     });
     stories.sort(function (a, b) {
@@ -776,9 +792,12 @@ $.getBroadcastNote = function() {
 
     var chores = [];
     getChore().children('.name').each(function(){
-        var chore = {name:"", broadcast:"", ep:"", id:""};
+        var chore = {name:"", broadcast:"", ep:"", id:"", version: ""};
         chore.id = $(this).parent().parent().attr("data-id");
         chore.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        if (chore.broadcast.indexOf(",") > -1){
+            chore.broadcast = chore.broadcast.substring(0,chore.broadcast.indexOf(","));
+        }
         chore.name = $(this).children('.story_name').text();
         chore.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
         if (chore.ep === "") {
@@ -786,11 +805,20 @@ $.getBroadcastNote = function() {
         } else if (chore.ep.indexOf(",") > -1) {
             chore.ep = chore.ep.substring(0,chore.ep.indexOf(","));
         }
+        
+        chore.version = capitalizeFirstLetter($(this).children('.labels').children('a:contains("v -")').first().text());
+         if (chore.version.indexOf(",") > -1){
+            chore.version = chore.version.substring(0,chore.version.indexOf(","));
+        }
+        
         chores.push(chore);
         if (chore.broadcast === "") {
             togglz.push(chore);
+            if (chore.version != "") {
+                version.push(chore.version);
+            }
         } else {
-            broadcasts.push(chore.broadcast);            
+            broadcasts.push(chore.broadcast);
         }
     });
     chores.sort(function (a, b) {
@@ -799,22 +827,34 @@ $.getBroadcastNote = function() {
 
     var bugs = [];
     getBug().children('.name').each(function(){
-        var bug = {name:"", broadcast:"", ep:"", id:""};
+        var bug = {name:"", broadcast:"", ep:"", id:"", version:""};
         bug.id = $(this).parent().parent().attr("data-id");
         bug.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
+        if (bug.broadcast.indexOf(",") > -1){
+            bug.broadcast = bug.broadcast.substring(0,bug.broadcast.indexOf(","));
+        }
         bug.name = $(this).children('.story_name').text();
         bug.ep = $(this).children('.labels').children('a:contains("ep -")').first().text();
         if (bug.ep === "") {
             bug.ep ="ep - autre";
         } else if (bug.ep.indexOf(",") > -1) {
             bug.ep = bug.ep.substring(0,bug.ep.indexOf(","));
+        }       
+        
+        bug.version = capitalizeFirstLetter($(this).children('.labels').children('a:contains("v -")').first().text());
+         if (bug.version.indexOf(",") > -1){
+            bug.version = bug.version.substring(0,bug.version.indexOf(","));
         }
+        
         $(this).children('.labels.pre').children('a:contains("bugprod")').each(function() {
             bugs.push(bug);
             if (bug.broadcast === "") {
                 togglz.push(bug);
+                if (bug.version != "") {
+                    version.push(bug.version);
+                }
             } else {
-                broadcasts.push(bug.broadcast);            
+                broadcasts.push(bug.broadcast);
             }
         });
     });
@@ -825,7 +865,7 @@ $.getBroadcastNote = function() {
     togglz.sort(function (a, b) {
         return a.name.localeCompare( b.name );
     });
-    
+
     if (stories.length > 0) {
         broadcastNote = capitalizeFirstLetter(stories[0].ep);
     } else if (chores.length > 0) {
@@ -859,12 +899,18 @@ $.getBroadcastNote = function() {
         }
     });
 
-    broadcastNote += "\n## Togglz\n\n";
-    $.each(togglz, function() {
-        broadcastNote += " * " + this.name + " [https://www.pivotaltracker.com/story/show/" + this.id + "]\n";
+    broadcastNote += "\n## OnAir\n\n";
+    $.each($.unique(version.sort()), function() {
+        broadcastNote += "\n### " + this + "\n\n";
+        var version = this;
+        var i = 0;
+        for (i = 0; i < togglz.length; i++) {
+            if (togglz[i].version == version) {
+                broadcastNote += " * " + togglz[i].name + " [https://www.pivotaltracker.com/story/show/" + togglz[i].id + "]\n";
+            }
+        }
     });
     console.clear();
     console.log(broadcastNote);
     executeCopy(broadcastNote);
 };
-
