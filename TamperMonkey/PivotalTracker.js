@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.38
+// @version      0.39
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -130,8 +130,8 @@ function highlightLabelsNeedSomething() {
 
 $( document ).bind("ajaxSuccess",function(event, xhr, settings) {
     if (xhr.responseJSON && xhr.responseJSON.data && (xhr.responseJSON.data.kind === "layout_scheme" || xhr.responseJSON.data.kind === "command_create_response" || (xhr.responseJSON.data.kind === "message" && xhr.responseJSON.data.text === "Subscribed to push changes")) ) {
-        $('body').find("a[title*='Add Story']").unbind("click");
-        $('body').find("a[title*='Add Story']").bind("click", function(){
+        $('body').find("button[class*='Sidebar__addStory___wMyRzEAE']").unbind("click");
+        $('body').find("button[class*='Sidebar__addStory___wMyRzEAE']").bind("click", function(){
             setTimeout(function() {
                 bindNewTextarea();
             }, 100);
@@ -202,7 +202,7 @@ function applyTemplate() {
 
 function bindNewTextarea() {
     if ($('.new')) {
-        $('.new').find("div[class='DescriptionShow___3-QsNMNj tracker_markup DescriptionShow__placeholder___1NuiicbF']").bind("click", applyTemplate);
+        $('.new').find("div[class='DescriptionShow___3-QsNMNj DescriptionShow__placeholder___1NuiicbF']").bind("click", applyTemplate);
     }
 }
 
