@@ -9,7 +9,7 @@ Et rajouter ça à la fin:
 ```
 document.addEventListener('DOMContentLoaded', function() {
  $.ajax({
-   url: 'https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css',
+   url: 'https://raw.githubusercontent.com/Omnimed/Omnimed-utilitiesScript/master/Style/Slack/black.css',
    success: function(css) {
      $("<style></style>").appendTo('head').html(css);
    }
