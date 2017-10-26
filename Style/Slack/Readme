@@ -1,0 +1,20 @@
+Pour être certain que le fichier ne devienne plus disponible, je met le fichier CSS nécessaire dans notre.
+
+Tout le mérite va à laCour https://github.com/laCour/slack-night-mode/issues/73#issuecomment-287467332
+
+Il faut éditer le fichier `app.asar.unpacked/src/static/ssb-interop.js`
+
+Et rajouter ça à la fin:
+
+```
+document.addEventListener('DOMContentLoaded', function() {
+ $.ajax({
+   url: 'https://cdn.rawgit.com/laCour/slack-night-mode/master/css/raw/black.css',
+   success: function(css) {
+     $("<style></style>").appendTo('head').html(css);
+   }
+ });
+});
+```
+
+Le path dans ubuntu le path est `/usr/lib/slack/resources`
