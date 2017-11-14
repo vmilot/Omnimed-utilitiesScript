@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pivotal Tracker Enhanced
 // @namespace    https://www.pivotaltracker.com/
-// @version      0.40
+// @version      0.41
 // @description  Pivotal Tracker enhanced for Omnimed
 // @author       Omnimed
 // @match        https://www.pivotaltracker.com/*
@@ -396,7 +396,7 @@ function update_output() {
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getSprintSheet()'>Sprint sheet</button>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getPlanningPoker()'>PlanningPoker</button>" +
                                                        "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getDiff()'>Diff</button>" +
-                                                       "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getBroadcastNote()'>Broadcast note</button>" +
+                                                       "<button class='selectedStoriesControls__button' style='font-weight:bold;' type='button' onClick='$.getBroadcastNote()'>Episode note</button>" +
                                                        "</div>" +
                                                        "</span>");
 }
@@ -759,7 +759,6 @@ $.getBroadcastNote = function() {
     getFeature().children('.name').each(function(){
         var story = {name:"", broadcast:"", ep:"", id:"", version:""};
         story.id = $(this).parent().parent().attr("data-id");
-        debugger;
         story.broadcast = capitalizeFirstLetter($(this).children('.labels').children('a:contains("broadcast")').first().text());
         if (story.broadcast.indexOf(",") > -1){
             story.broadcast = story.broadcast.substring(0,story.broadcast.indexOf(","));
