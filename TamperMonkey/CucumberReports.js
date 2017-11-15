@@ -40,10 +40,10 @@ function colorCucumberTags() {
 	colorCucumberTagForQA('Beta', 'Moc');
 
 	colorCucumberTagForQA('CA', 'Val');
-	colorCucumberTagForQA('CAS', 'Val');
+	colorCucumberTagForQA('CAS', 'Nic');
 	colorCucumberTagForQA('CentreAdmin', 'Val');
 	colorCucumberTagForQA('ChampConfidentiel', 'Nic');
-	colorCucumberTagForQA('Compte', 'Val');
+	colorCucumberTagForQA('Compte', 'Nic');
 
    	colorCucumberTagForQA('DossierPatientBoiteSommaire', 'Nic');
 	colorCucumberTagForQA('Dictionnaire', 'Nic');
@@ -65,7 +65,7 @@ function colorCucumberTags() {
 	colorCucumberTagForQA('ListeTaches', 'Nic');
 
 	colorCucumberTagForQA('MaladieChronique', 'Nic');
-    	colorCucumberTagForQA('MenuOmnimed', 'Val');
+    	colorCucumberTagForQA('MenuOmnimed', 'Nic');
 
 	colorCucumberTagForQA('NC', 'Nic');
 	colorCucumberTagForQA('Note', 'Nic');
@@ -77,7 +77,7 @@ function colorCucumberTags() {
 	colorCucumberTagForQA('Patient', 'Val');
 	colorCucumberTagForQA('Prescripteur', 'Val');
 	colorCucumberTagForQA('Problemes', 'Nic');
-	colorCucumberTagForQA('Profil', 'Val');
+	colorCucumberTagForQA('Profil', 'Nic');
 	colorCucumberTagForQA('Programmes', 'Nic');
 
 	colorCucumberTagForQA('RendezVous', 'Val');
